@@ -6,6 +6,8 @@
 
 #include "FGPlayerController.generated.h"
 
+class AEquippableItem;
+
 UCLASS()
 class FIGHTINGGAME_API AFGPlayerController : public APlayerController
 {
@@ -16,6 +18,8 @@ public:
 	AFGPlayerController() = default;
 
 protected:
+	virtual void BeginPlay() override;
+
 	virtual void SetupInputComponent() override;
 #pragma endregion Overrides
 
@@ -88,4 +92,16 @@ protected:
 	/** Called for side to side input */
 	void CharacterMoveRight(const float Value);
 #pragma endregion Movement
+
+#pragma region EquippableItem
+public:
+	AEquippableItem* SpawnAndEquipNewItem(TSubclassOf<AEquippableItem> Item);
+
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "EquippableItem")
+	TSubclassOf<AEquippableItem> ItemToEquipOnBeginPlay = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, Category = "EquippableItem")
+	bool bEquipItemOnBeginPlay = true;
+#pragma endregion EquippableItem
 };

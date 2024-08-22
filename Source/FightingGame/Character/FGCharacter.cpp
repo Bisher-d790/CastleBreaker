@@ -7,6 +7,7 @@
 #include "GameFramework/SpringArmComponent.h"
 
 // Project
+#include "FightingGame/Items/EquippableItem.h"
 
 
 AFGCharacter::AFGCharacter()
@@ -39,20 +40,37 @@ AFGCharacter::AFGCharacter()
 
 void AFGCharacter::StartPrimaryAction()
 {
-	GEngine->AddOnScreenDebugMessage(0, 2, FColor::Red, FString("Primary Action Start"));
+	if (IsValid(EquippedItem))
+		EquippedItem->StartPrimaryAction();
 }
 
 void AFGCharacter::StopPrimaryAction()
 {
-	GEngine->AddOnScreenDebugMessage(0, 2, FColor::Red, FString("Primary Action Stop"));
+	if (IsValid(EquippedItem))
+		EquippedItem->StopPrimaryAction();
 }
 
 void AFGCharacter::StartSecondaryAction()
 {
-	GEngine->AddOnScreenDebugMessage(0, 2, FColor::Red, FString("Secondary Action Start"));
+	if (IsValid(EquippedItem))
+		EquippedItem->StartSecondaryAction();
 }
 
 void AFGCharacter::StopSecondaryAction()
 {
-	GEngine->AddOnScreenDebugMessage(0, 2, FColor::Red, FString("Secondary Action Stop"));
+	if (IsValid(EquippedItem))
+		EquippedItem->StopSecondaryAction();
+}
+
+void AFGCharacter::EquipItem(AEquippableItem* Item)
+{
+	if (!IsValid(Item) || EquippedItem == Item) return;
+
+	const auto OldItem = EquippedItem;
+	EquippedItem = Item;
+	EquippedItem->SetOwner(this);
+	if (GetMesh())
+		EquippedItem->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, EquippedItemSocket);
+
+	OnEquippedItemChanged.Broadcast(OldItem, Item);
 }

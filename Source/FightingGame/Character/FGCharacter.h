@@ -8,6 +8,7 @@
 
 class USpringArmComponent;
 class UCameraComponent;
+class AEquippableItem;
 
 UCLASS(config = Game)
 class AFGCharacter : public ACharacter
@@ -50,5 +51,27 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Actions")
 	virtual void StopSecondaryAction();
 #pragma endregion Actions
+
+#pragma region Item
+public:
+	template<class T>
+	inline T* GetEquippedItem() const { return Cast<T>(EquippedItem); }
+
+	UFUNCTION(BlueprintPure, Category = "EquippedItem")
+	FORCEINLINE AEquippableItem* GetEquippedItem() const { return EquippedItem; }
+
+	void EquipItem(AEquippableItem* Item);
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnEquippedItemChanged, const AEquippableItem*, OldItem, const AEquippableItem*, EquippedItem);
+	UPROPERTY(BlueprintAssignable, Category = "EquippedItem")
+	FOnEquippedItemChanged OnEquippedItemChanged;
+
+protected:
+	UPROPERTY() AEquippableItem* EquippedItem = nullptr;
+
+	// The socket name to connect the item to the Skeleton
+	UPROPERTY(EditDefaultsOnly, Category = "EquippedItem|Socket")
+	FName EquippedItemSocket = "WeaponSocket";
+#pragma endregion Item
 };
 
