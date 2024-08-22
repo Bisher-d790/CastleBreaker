@@ -11,17 +11,22 @@ void AFGPlayerController::SetupInputComponent()
 	if (!IsValid(InputComponent)) return;
 
 	// Set up gameplay key bindings
-	InputComponent->BindAction("Jump", IE_Pressed, this, &AFGPlayerController::CharacterJump);
+	InputComponent->BindAction(PrimaryActionInputName, IE_Pressed, this, &AFGPlayerController::OnPrimaryActionStart);
+	InputComponent->BindAction(PrimaryActionInputName, IE_Released, this, &AFGPlayerController::OnPrimaryActionEnd);
+	InputComponent->BindAction(SecondaryActionInputName, IE_Pressed, this, &AFGPlayerController::OnSecondaryActionStart);
+	InputComponent->BindAction(SecondaryActionInputName, IE_Released, this, &AFGPlayerController::OnSecondaryActionEnd);
 
-	InputComponent->BindAction("Crouch", IE_Pressed, this, &AFGPlayerController::CharacterCrouchToggle);
+	InputComponent->BindAction(JumpInputName, IE_Pressed, this, &AFGPlayerController::CharacterJump);
 
-	InputComponent->BindAxis("MoveForward", this, &AFGPlayerController::CharacterMoveForward);
-	InputComponent->BindAxis("MoveRight", this, &AFGPlayerController::CharacterMoveRight);
+	InputComponent->BindAction(CrouchInputName, IE_Pressed, this, &AFGPlayerController::CharacterCrouchToggle);
 
-	InputComponent->BindAxis("Turn", this, &AFGPlayerController::AddYawInput);
-	InputComponent->BindAxis("TurnRate", this, &AFGPlayerController::TurnAtRate);
-	InputComponent->BindAxis("LookUp", this, &AFGPlayerController::AddPitchInput);
-	InputComponent->BindAxis("LookUpRate", this, &AFGPlayerController::LookUpAtRate);
+	InputComponent->BindAxis(MoveForwardInputName, this, &AFGPlayerController::CharacterMoveForward);
+	InputComponent->BindAxis(MoveRightInputName, this, &AFGPlayerController::CharacterMoveRight);
+
+	InputComponent->BindAxis(TurnInputName, this, &AFGPlayerController::AddYawInput);
+	InputComponent->BindAxis(TurnRateInputName, this, &AFGPlayerController::TurnAtRate);
+	InputComponent->BindAxis(LookUpInputName, this, &AFGPlayerController::AddPitchInput);
+	InputComponent->BindAxis(LookUpRateInputName, this, &AFGPlayerController::LookUpAtRate);
 }
 
 void AFGPlayerController::TurnAtRate(const float Rate)
@@ -34,6 +39,30 @@ void AFGPlayerController::LookUpAtRate(const float Rate)
 {
 	// calculate delta for this frame from the rate information
 	AddPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+}
+
+void AFGPlayerController::OnPrimaryActionStart()
+{
+	if (const auto FGCharacter = GetPawn<AFGCharacter>())
+		FGCharacter->StartPrimaryAction();
+}
+
+void AFGPlayerController::OnPrimaryActionEnd()
+{
+	if (const auto FGCharacter = GetPawn<AFGCharacter>())
+		FGCharacter->StopPrimaryAction();
+}
+
+void AFGPlayerController::OnSecondaryActionStart()
+{
+	if (const auto FGCharacter = GetPawn<AFGCharacter>())
+		FGCharacter->StartSecondaryAction();
+}
+
+void AFGPlayerController::OnSecondaryActionEnd()
+{
+	if (const auto FGCharacter = GetPawn<AFGCharacter>())
+		FGCharacter->StopSecondaryAction();
 }
 
 void AFGPlayerController::CharacterJump()

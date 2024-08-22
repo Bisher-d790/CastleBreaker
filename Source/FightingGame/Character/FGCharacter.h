@@ -35,5 +35,20 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 #pragma region Camera
+
+#pragma region Actions
+public:
+	UFUNCTION(BlueprintCallable, Category = "Actions")
+	virtual void StartPrimaryAction();
+
+	UFUNCTION(BlueprintCallable, Category = "Actions")
+	virtual void StopPrimaryAction();
+
+	UFUNCTION(BlueprintCallable, Category = "Actions")
+	virtual void StartSecondaryAction();
+
+	UFUNCTION(BlueprintCallable, Category = "Actions")
+	virtual void StopSecondaryAction();
+#pragma endregion Actions
 };
 

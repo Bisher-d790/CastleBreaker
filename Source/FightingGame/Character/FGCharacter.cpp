@@ -36,3 +36,23 @@ AFGCharacter::AFGCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 }
+
+void AFGCharacter::StartPrimaryAction()
+{
+	GEngine->AddOnScreenDebugMessage(0, 2, FColor::Red, FString("Primary Action Start"));
+}
+
+void AFGCharacter::StopPrimaryAction()
+{
+	GEngine->AddOnScreenDebugMessage(0, 2, FColor::Red, FString("Primary Action Stop"));
+}
+
+void AFGCharacter::StartSecondaryAction()
+{
+	GEngine->AddOnScreenDebugMessage(0, 2, FColor::Red, FString("Secondary Action Start"));
+}
+
+void AFGCharacter::StopSecondaryAction()
+{
+	GEngine->AddOnScreenDebugMessage(0, 2, FColor::Red, FString("Secondary Action Stop"));
+}

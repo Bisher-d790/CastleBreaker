@@ -36,6 +36,47 @@ protected:
 
 #pragma region Input
 protected:
+	UPROPERTY(EditDefaultsOnly, Category = UI)
+	FName PrimaryActionInputName = "PrimaryAction";
+
+	UPROPERTY(EditDefaultsOnly, Category = UI)
+	FName SecondaryActionInputName = "SecondaryAction";
+
+	UPROPERTY(EditDefaultsOnly, Category = UI)
+	FName JumpInputName = "Jump";
+
+	UPROPERTY(EditDefaultsOnly, Category = UI)
+	FName CrouchInputName = "Crouch";
+
+	UPROPERTY(EditDefaultsOnly, Category = UI)
+	FName MoveForwardInputName = "MoveForward";
+
+	UPROPERTY(EditDefaultsOnly, Category = UI)
+	FName MoveRightInputName = "MoveRight";
+
+	UPROPERTY(EditDefaultsOnly, Category = UI)
+	FName TurnInputName = "Turn";
+
+	UPROPERTY(EditDefaultsOnly, Category = UI)
+	FName TurnRateInputName = "TurnRate";
+
+	UPROPERTY(EditDefaultsOnly, Category = UI)
+	FName LookUpInputName = "LookUp";
+
+	UPROPERTY(EditDefaultsOnly, Category = UI)
+	FName LookUpRateInputName = "LookUpRate";
+#pragma endregion Input
+
+#pragma region Actions
+protected:
+	void OnPrimaryActionStart();
+	void OnPrimaryActionEnd();
+	void OnSecondaryActionStart();
+	void OnSecondaryActionEnd();
+#pragma endregion Actions
+
+#pragma region Movement
+protected:
 	/** Called for jump input */
 	void CharacterJump();
 
@@ -46,5 +87,5 @@ protected:
 
 	/** Called for side to side input */
 	void CharacterMoveRight(const float Value);
-#pragma endregion Input
+#pragma endregion Movement
 };
