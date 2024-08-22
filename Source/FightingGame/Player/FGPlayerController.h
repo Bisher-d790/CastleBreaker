@@ -39,6 +39,8 @@ protected:
 	/** Called for jump input */
 	void CharacterJump();
 
+	void CharacterCrouchToggle();
+
 	/** Called for forwards/backward input */
 	void CharacterMoveForward(const float Value);
 

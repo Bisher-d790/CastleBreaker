@@ -13,6 +13,8 @@ void AFGPlayerController::SetupInputComponent()
 	// Set up gameplay key bindings
 	InputComponent->BindAction("Jump", IE_Pressed, this, &AFGPlayerController::CharacterJump);
 
+	InputComponent->BindAction("Crouch", IE_Pressed, this, &AFGPlayerController::CharacterCrouchToggle);
+
 	InputComponent->BindAxis("MoveForward", this, &AFGPlayerController::CharacterMoveForward);
 	InputComponent->BindAxis("MoveRight", this, &AFGPlayerController::CharacterMoveRight);
 
@@ -39,6 +41,16 @@ void AFGPlayerController::CharacterJump()
 	if (!IsValid(GetCharacter())) return;
 
 	GetCharacter()->Jump();
+}
+
+void AFGPlayerController::CharacterCrouchToggle()
+{
+	if (!IsValid(GetCharacter())) return;
+
+	if (GetCharacter()->bIsCrouched)
+		GetCharacter()->UnCrouch();
+	else
+		GetCharacter()->Crouch();
 }
 
 void AFGPlayerController::CharacterMoveForward(const float Value)
