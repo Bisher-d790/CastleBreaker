@@ -1,5 +1,3 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 #include "FightingGame.h"
 #include "Modules/ModuleManager.h"
 
