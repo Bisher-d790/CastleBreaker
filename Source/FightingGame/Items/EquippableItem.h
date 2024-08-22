@@ -85,4 +85,20 @@ protected:
 	UPROPERTY() bool bIsSecondaryActionActive = false;
 	UPROPERTY() float SecondaryActionTimeActive = 0.f;
 #pragma endregion Actions
+
+#pragma region Animations
+public:
+	UFUNCTION(BlueprintCallable, Category = "PrimaryAction|Animations")
+	FORCEINLINE UAnimationAsset* GetPrimaryActionAnimation() const { return PrimaryActionAnimation; };
+
+	UFUNCTION(BlueprintCallable, Category = "PrimaryAction|Animations")
+	FORCEINLINE UAnimationAsset* GetSecondaryActionAnimation() const { return SecondaryActionAnimation; };
+
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "PrimaryAction|Animations")
+	UAnimationAsset* PrimaryActionAnimation = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, Category = "SecondaryAction|Animations")
+	UAnimationAsset* SecondaryActionAnimation = nullptr;
+#pragma endregion Animations
 };
