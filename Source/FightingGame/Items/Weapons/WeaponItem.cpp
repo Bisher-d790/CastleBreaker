@@ -18,8 +18,6 @@ void AWeaponItem::StartAttack()
 
 	bIsAttacking = true;
 
-	GetWorldTimerManager().SetTimer(AttackTimer, this, &AWeaponItem::FinishAttack, AttackDuration);
-
 	// Disable movement
 	if (const auto OwnerCharacter = GetOwner<ACharacter>())
 	{
@@ -27,8 +25,11 @@ void AWeaponItem::StartAttack()
 			MovementComp->DisableMovement();
 
 		if (const auto OwnerMesh = OwnerCharacter->GetMesh())
-			OwnerMesh->PlayAnimation(PrimaryActionAnimation, false);
+			OwnerMesh->PlayAnimation(AttackAnimation, false);
 	}
+
+	// Finish with timer
+	GetWorldTimerManager().SetTimer(AttackTimer, this, &AWeaponItem::FinishAttack, AttackDuration);
 }
 
 void AWeaponItem::FinishAttack()

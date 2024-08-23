@@ -8,7 +8,6 @@
 
 class UMeshComponent;
 class USphereComponent;
-class UAnimationAsset;
 
 /// <summary>
 /// Base class for any item that could be equipped,
@@ -85,13 +84,4 @@ protected:
 	UPROPERTY() bool bIsSecondaryActionActive = false;
 	UPROPERTY() float SecondaryActionTimeActive = 0.f;
 #pragma endregion Actions
-
-#pragma region Animations
-protected:
-	UPROPERTY(EditDefaultsOnly, Category = "PrimaryAction|Animations")
-	UAnimationAsset* PrimaryActionAnimation = nullptr;
-
-	UPROPERTY(EditDefaultsOnly, Category = "SecondaryAction|Animations")
-	UAnimationAsset* SecondaryActionAnimation = nullptr;
-#pragma endregion Animations
 };

@@ -11,7 +11,6 @@ class FIGHTINGGAME_API AWeaponItem : public AEquippableItem
 {
 	GENERATED_BODY()
 
-
 #pragma region Attack
 public:
 	virtual void StartPrimaryAction() override;
@@ -39,4 +38,11 @@ protected:
 
 	FTimerHandle AttackTimer;
 #pragma endregion Attack
+
+	// TODO: Make a comprehensive actions Data Table and set specific animations and properties to each attack
+#pragma region Animations
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Attack|Animations")
+	UAnimationAsset* AttackAnimation = nullptr;
+#pragma endregion Animations
 };
