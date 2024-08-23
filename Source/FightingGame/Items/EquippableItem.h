@@ -87,13 +87,6 @@ protected:
 #pragma endregion Actions
 
 #pragma region Animations
-public:
-	UFUNCTION(BlueprintCallable, Category = "PrimaryAction|Animations")
-	FORCEINLINE UAnimationAsset* GetPrimaryActionAnimation() const { return PrimaryActionAnimation; };
-
-	UFUNCTION(BlueprintCallable, Category = "PrimaryAction|Animations")
-	FORCEINLINE UAnimationAsset* GetSecondaryActionAnimation() const { return SecondaryActionAnimation; };
-
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "PrimaryAction|Animations")
 	UAnimationAsset* PrimaryActionAnimation = nullptr;

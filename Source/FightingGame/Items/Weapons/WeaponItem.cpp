@@ -14,7 +14,7 @@ void AWeaponItem::StartPrimaryAction()
 
 void AWeaponItem::StartAttack()
 {
-	if (bIsAttacking) return;
+	if (!CanAttack()) return;
 
 	bIsAttacking = true;
 
@@ -25,6 +25,9 @@ void AWeaponItem::StartAttack()
 	{
 		if (const auto MovementComp = OwnerCharacter->GetCharacterMovement())
 			MovementComp->DisableMovement();
+
+		if (const auto OwnerMesh = OwnerCharacter->GetMesh())
+			OwnerMesh->PlayAnimation(PrimaryActionAnimation, false);
 	}
 }
 
@@ -37,5 +40,24 @@ void AWeaponItem::FinishAttack()
 	{
 		if (const auto MovementComp = OwnerCharacter->GetCharacterMovement())
 			MovementComp->SetMovementMode(EMovementMode::MOVE_Walking);
+
+		if (const auto OwnerMesh = OwnerCharacter->GetMesh())
+			OwnerMesh->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 	}
+}
+
+bool AWeaponItem::CanAttack() const
+{
+	// Don't attack while in the air
+	if (!bCanAttackInTheAir)
+	{
+		if (const auto OwnerCharacter = GetOwner<ACharacter>())
+		{
+			if (const auto MovementComp = OwnerCharacter->GetCharacterMovement())
+				if (MovementComp->IsFalling()) return false;
+		}
+	}
+
+	// Don't attack if is already attacking
+	return !bIsAttacking;
 }

@@ -27,10 +27,15 @@ public:
 	FORCEINLINE float GetAttackDuration() const { return AttackDuration; }
 
 protected:
+	virtual bool CanAttack() const;
+
 	UPROPERTY() bool bIsAttacking = false;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Attack")
 	float AttackDuration = 2.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Attack")
+	bool bCanAttackInTheAir = false;
 
 	FTimerHandle AttackTimer;
 #pragma endregion Attack
