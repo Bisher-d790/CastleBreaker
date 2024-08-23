@@ -34,6 +34,9 @@ protected:
 	float AttackDuration = 2.f;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Attack")
+	float AttackDamage = 20.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Attack")
 	bool bCanAttackInTheAir = false;
 
 	FTimerHandle AttackTimer;

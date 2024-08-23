@@ -31,5 +31,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Attack")
 	UCapsuleComponent* BladeCollision = nullptr;
+
+	UPROPERTY() TArray<AActor*> AttackedActors = {};
 #pragma endregion Attack
 };

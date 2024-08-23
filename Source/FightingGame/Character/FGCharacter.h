@@ -94,7 +94,7 @@ public:
 	virtual void Heal(const float HealAmount) override;
 
 protected:
-	UPROPERTY(EditDefaultsOnly, Category = "Health")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Health")
 	UHealthComponent* HealthComponent = nullptr;
 #pragma endregion Health
 };
