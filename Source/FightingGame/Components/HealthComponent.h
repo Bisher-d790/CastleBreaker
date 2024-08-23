@@ -57,6 +57,6 @@ protected:
 	float MaxHealth = 100.f;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Health")
-	float Health = 0.f;
+	float Health = 100.f;
 #pragma endregion Health
 };

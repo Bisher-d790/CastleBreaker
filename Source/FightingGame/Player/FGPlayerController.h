@@ -7,6 +7,7 @@
 #include "FGPlayerController.generated.h"
 
 class AEquippableItem;
+class UUserWidget;
 
 UCLASS()
 class FIGHTINGGAME_API AFGPlayerController : public APlayerController
@@ -104,4 +105,17 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "EquippableItem")
 	bool bEquipItemOnBeginPlay = true;
 #pragma endregion EquippableItem
+
+#pragma region UI
+protected:
+	void SetupHUDWidget();
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI|HUD")
+	bool bAddHUDOnBeginPlay = true;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI|HUD")
+	TSubclassOf<UUserWidget> HUDWidgetClass = nullptr;
+
+	UPROPERTY() UUserWidget* HUDWidgetInstance = nullptr;
+#pragma endregion UI
 };

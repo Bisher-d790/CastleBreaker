@@ -1,5 +1,8 @@
 #include "FGPlayerController.h"
 
+// Engine
+#include "Blueprint/UserWidget.h"
+
 // Project
 #include "FightingGame/Character/FGCharacter.h"
 #include "FightingGame/Items/EquippableItem.h"
@@ -11,6 +14,9 @@ void AFGPlayerController::BeginPlay()
 
 	if (bEquipItemOnBeginPlay)
 		SpawnAndEquipNewItem(ItemToEquipOnBeginPlay);
+
+	if (bAddHUDOnBeginPlay)
+		SetupHUDWidget();
 }
 
 void AFGPlayerController::SetupInputComponent()
@@ -133,4 +139,20 @@ AEquippableItem* AFGPlayerController::SpawnAndEquipNewItem(TSubclassOf<AEquippab
 	}
 
 	return nullptr;
+}
+
+void AFGPlayerController::SetupHUDWidget()
+{
+	if (!IsValid(HUDWidgetClass)) return;
+
+	if (!IsValid(HUDWidgetInstance))
+	{
+		HUDWidgetInstance = CreateWidget<UUserWidget>(this, HUDWidgetClass);
+	}
+
+	if (IsValid(HUDWidgetInstance))
+	{
+		HUDWidgetInstance->RemoveFromParent();
+		HUDWidgetInstance->AddToViewport();
+	}
 }
