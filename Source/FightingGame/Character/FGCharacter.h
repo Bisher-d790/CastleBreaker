@@ -4,20 +4,28 @@
 // Engine
 #include "CoreMinimal.h"
 
+// Project
+#include "FightingGame/Interfaces/DamageableInterface.h"
+
 #include "FGCharacter.generated.h"
 
 class USpringArmComponent;
 class UCameraComponent;
+class UHealthComponent;
 class AEquippableItem;
 
 UCLASS(config = Game)
-class AFGCharacter : public ACharacter
+class AFGCharacter : public ACharacter, public IDamageableInterface
 {
 	GENERATED_BODY()
 
 #pragma region Overrides
 public:
 	AFGCharacter();
+
+protected:
+	virtual float InternalTakeRadialDamage(float Damage, struct FRadialDamageEvent const& RadialDamageEvent, class AController* EventInstigator, AActor* DamageCauser);
+	virtual float InternalTakePointDamage(float Damage, struct FPointDamageEvent const& PointDamageEvent, class AController* EventInstigator, AActor* DamageCauser);
 #pragma endregion Overrides
 
 #pragma region Camera
@@ -73,5 +81,21 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "EquippedItem|Socket")
 	FName EquippedItemSocket = "WeaponSocket";
 #pragma endregion Item
+
+#pragma region Health
+public:
+	UFUNCTION(BlueprintPure, Category = "Health")
+	virtual FORCEINLINE UHealthComponent* GetHealthComponent() const override { return HealthComponent; }
+
+	UFUNCTION(BlueprintCallable, Category = "Health")
+	virtual void TakeDamage(const float Damage) override;
+
+	UFUNCTION(BlueprintCallable, Category = "Health")
+	virtual void Heal(const float HealAmount) override;
+
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Health")
+	UHealthComponent* HealthComponent = nullptr;
+#pragma endregion Health
 };
 

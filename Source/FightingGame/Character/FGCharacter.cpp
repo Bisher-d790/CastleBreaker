@@ -8,6 +8,7 @@
 
 // Project
 #include "FightingGame/Items/EquippableItem.h"
+#include "FightingGame/Components/HealthComponent.h"
 
 
 AFGCharacter::AFGCharacter()
@@ -36,6 +37,22 @@ AFGCharacter::AFGCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
+}
+
+float AFGCharacter::InternalTakeRadialDamage(float Damage, FRadialDamageEvent const& RadialDamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	const float ActualDamage = Super::InternalTakeRadialDamage(Damage, RadialDamageEvent, EventInstigator, DamageCauser);
+	TakeDamage(ActualDamage);
+	return ActualDamage;
+}
+
+float AFGCharacter::InternalTakePointDamage(float Damage, FPointDamageEvent const& PointDamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	const float ActualDamage = Super::InternalTakePointDamage(Damage, PointDamageEvent, EventInstigator, DamageCauser);
+	TakeDamage(ActualDamage);
+	return ActualDamage;
 }
 
 void AFGCharacter::StartPrimaryAction()
@@ -73,4 +90,20 @@ void AFGCharacter::EquipItem(AEquippableItem* Item)
 		EquippedItem->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, EquippedItemSocket);
 
 	OnEquippedItemChanged.Broadcast(OldItem, Item);
+}
+
+void AFGCharacter::TakeDamage(const float Damage)
+{
+	if (IsValid(HealthComponent))
+	{
+		HealthComponent->Damage(Damage);
+	}
+}
+
+void AFGCharacter::Heal(const float HealAmount)
+{
+	if (IsValid(HealthComponent))
+	{
+		HealthComponent->Heal(HealAmount);
+	}
 }
