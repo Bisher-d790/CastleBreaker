@@ -16,6 +16,9 @@ AEquippableItem::AEquippableItem()
 	SetRootComponent(Collision);
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	Mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	Mesh->SetGenerateOverlapEvents(false);
 	Mesh->SetupAttachment(RootComponent);
 }
 
