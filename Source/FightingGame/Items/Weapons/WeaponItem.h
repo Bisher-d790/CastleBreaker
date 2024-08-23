@@ -15,10 +15,6 @@ class FIGHTINGGAME_API AWeaponItem : public AEquippableItem
 public:
 	virtual void StartPrimaryAction() override;
 
-	virtual void StartAttack();
-
-	virtual void FinishAttack();
-
 	UFUNCTION(BlueprintPure, Category = "Attack")
 	FORCEINLINE bool IsAttacking() const { return bIsAttacking; }
 
@@ -26,6 +22,10 @@ public:
 	FORCEINLINE float GetAttackDuration() const { return AttackDuration; }
 
 protected:
+	virtual void StartAttack();
+
+	virtual void FinishAttack();
+
 	virtual bool CanAttack() const;
 
 	UPROPERTY() bool bIsAttacking = false;
