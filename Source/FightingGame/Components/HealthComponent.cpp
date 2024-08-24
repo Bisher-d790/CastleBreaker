@@ -20,6 +20,6 @@ void UHealthComponent::ChangeHealth(const float ChangeAmount)
 
 	if (Health <= 0)
 	{
-		OnHealthReachedZero.Broadcast();
+		OnDeath.Broadcast();
 	}
 }

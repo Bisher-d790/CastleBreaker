@@ -28,6 +28,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Health|Getters")
 	FORCEINLINE float GetMaxHealth() const { return MaxHealth; }
 
+	UFUNCTION(BlueprintPure, Category = "Health|Getters")
+	FORCEINLINE bool IsDead() const { return Health <= 0.f; }
+
 	UFUNCTION(BlueprintCallable, Category = "Health|Setters")
 	void SetMaxHealth(const float NewMaxHealth) { MaxHealth = NewMaxHealth; }
 
@@ -41,9 +44,9 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Health|Events")
 	FOnHealthChanged OnHealthChanged;
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnHealthReachedZero);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeath);
 	UPROPERTY(BlueprintAssignable, Category = "Health|Events")
-	FOnHealthReachedZero OnHealthReachedZero;
+	FOnDeath OnDeath;
 
 protected:
 	void ChangeHealth(const float ChangeAmount);
