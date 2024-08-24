@@ -69,6 +69,7 @@ public:
 	FORCEINLINE AEquippableItem* GetEquippedItem() const { return EquippedItem; }
 
 	void EquipItem(AEquippableItem* Item);
+	void UnEquipItem();
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnEquippedItemChanged, const AEquippableItem*, OldItem, const AEquippableItem*, EquippedItem);
 	UPROPERTY(BlueprintAssignable, Category = "EquippedItem")

@@ -92,6 +92,18 @@ void AFGCharacter::EquipItem(AEquippableItem* Item)
 	OnEquippedItemChanged.Broadcast(OldItem, Item);
 }
 
+void AFGCharacter::UnEquipItem()
+{
+	if (!IsValid(EquippedItem)) return;
+
+	EquippedItem->SetOwner(nullptr);
+	EquippedItem->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+
+	const auto Item = EquippedItem;
+	EquippedItem = nullptr;
+	OnEquippedItemChanged.Broadcast(Item, EquippedItem);
+}
+
 void AFGCharacter::TakeDamage(const float Damage)
 {
 	if (IsValid(HealthComponent))
