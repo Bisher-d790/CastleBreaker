@@ -3,6 +3,7 @@
 // Project
 #include "FightingGame/Character/FGCharacter.h"
 #include "FightingGame/Items/EquippableItem.h"
+#include "FightingGame/Components/HealthComponent.h"
 
 
 void AFGAIController::BeginPlay()
@@ -11,6 +12,37 @@ void AFGAIController::BeginPlay()
 
 	if (bEquipItemOnBeginPlay)
 		SpawnAndEquipNewItem(ItemToEquipOnBeginPlay);
+
+	if (auto OwnedCharacter = GetPawn<AFGCharacter>())
+	{
+		if (const auto HealthComponent = OwnedCharacter->GetHealthComponent())
+			if (!HealthComponent->OnDeath.IsAlreadyBound(this, &ThisClass::HandleDeath))
+				HealthComponent->OnDeath.AddDynamic(this, &ThisClass::HandleDeath);
+	}
+}
+
+void AFGAIController::OnPossess(APawn* InPawn)
+{
+	Super::OnPossess(InPawn);
+
+	if (const auto OwnedCharacter = Cast<AFGCharacter>(InPawn))
+	{
+		if (const auto HealthComponent = OwnedCharacter->GetHealthComponent())
+			if (HealthComponent->OnDeath.IsAlreadyBound(this, &ThisClass::HandleDeath))
+				HealthComponent->OnDeath.RemoveDynamic(this, &ThisClass::HandleDeath);
+	}
+}
+
+void AFGAIController::OnUnPossess()
+{
+	if (const auto OwnedCharacter = GetPawn<AFGCharacter>())
+	{
+		if (const auto HealthComponent = OwnedCharacter->GetHealthComponent())
+			if (HealthComponent->OnDeath.IsAlreadyBound(this, &ThisClass::HandleDeath))
+				HealthComponent->OnDeath.RemoveDynamic(this, &ThisClass::HandleDeath);
+	}
+
+	Super::OnUnPossess();
 }
 
 AEquippableItem* AFGAIController::SpawnAndEquipNewItem(TSubclassOf<AEquippableItem> Item)
@@ -20,11 +52,25 @@ AEquippableItem* AFGAIController::SpawnAndEquipNewItem(TSubclassOf<AEquippableIt
 
 	if (const auto SpawnedItem = World->SpawnActor<AEquippableItem>(Item))
 	{
-		if (auto OwnedPawn = GetPawn<AFGCharacter>())
-			OwnedPawn->EquipItem(SpawnedItem);
+		if (const auto OwnedCharacter = GetPawn<AFGCharacter>())
+			OwnedCharacter->EquipItem(SpawnedItem);
 
 		return SpawnedItem;
 	}
 
 	return nullptr;
+}
+
+void AFGAIController::HandleDeath()
+{
+	if (const auto OwnedCharacter = GetPawn<AFGCharacter>())
+	{
+		if (const auto CharacterMesh = OwnedCharacter->GetMesh())
+			CharacterMesh->SetAnimationMode(EAnimationMode::AnimationBlueprint);
+
+		OwnedCharacter->UnEquipItem();
+		OwnedCharacter->SetLifeSpan(DestroyTimeAfterDeath);
+	}
+
+	SetLifeSpan(DestroyTimeAfterDeath);
 }

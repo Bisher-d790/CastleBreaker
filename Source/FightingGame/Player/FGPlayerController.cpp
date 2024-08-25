@@ -6,6 +6,7 @@
 // Project
 #include "FightingGame/Character/FGCharacter.h"
 #include "FightingGame/Items/EquippableItem.h"
+#include "FightingGame/Components/HealthComponent.h"
 
 
 void AFGPlayerController::BeginPlay()
@@ -17,6 +18,30 @@ void AFGPlayerController::BeginPlay()
 
 	if (bAddHUDOnBeginPlay)
 		SetupHUDWidget();
+}
+
+void AFGPlayerController::OnPossess(APawn* InPawn)
+{
+	Super::OnPossess(InPawn);
+
+	if (const auto OwnedCharacter = Cast<AFGCharacter>(InPawn))
+	{
+		if (const auto HealthComponent = OwnedCharacter->GetHealthComponent())
+			if (!HealthComponent->OnDeath.IsAlreadyBound(this, &ThisClass::HandlePlayerDeath))
+				HealthComponent->OnDeath.AddDynamic(this, &ThisClass::HandlePlayerDeath);
+	}
+}
+
+void AFGPlayerController::OnUnPossess()
+{
+	if (const auto OwnedCharacter = GetPawn<AFGCharacter>())
+	{
+		if (const auto HealthComponent = OwnedCharacter->GetHealthComponent())
+			if (HealthComponent->OnDeath.IsAlreadyBound(this, &ThisClass::HandlePlayerDeath))
+				HealthComponent->OnDeath.RemoveDynamic(this, &ThisClass::HandlePlayerDeath);
+	}
+
+	Super::OnUnPossess();
 }
 
 void AFGPlayerController::SetupInputComponent()
@@ -58,43 +83,43 @@ void AFGPlayerController::LookUpAtRate(const float Rate)
 
 void AFGPlayerController::OnPrimaryActionStart()
 {
-	if (const auto FGCharacter = GetPawn<AFGCharacter>())
-		FGCharacter->StartPrimaryAction();
+	if (const auto OwnedCharacter = GetPawn<AFGCharacter>())
+		OwnedCharacter->StartPrimaryAction();
 }
 
 void AFGPlayerController::OnPrimaryActionEnd()
 {
-	if (const auto FGCharacter = GetPawn<AFGCharacter>())
-		FGCharacter->StopPrimaryAction();
+	if (const auto OwnedCharacter = GetPawn<AFGCharacter>())
+		OwnedCharacter->StopPrimaryAction();
 }
 
 void AFGPlayerController::OnSecondaryActionStart()
 {
-	if (const auto FGCharacter = GetPawn<AFGCharacter>())
-		FGCharacter->StartSecondaryAction();
+	if (const auto OwnedCharacter = GetPawn<AFGCharacter>())
+		OwnedCharacter->StartSecondaryAction();
 }
 
 void AFGPlayerController::OnSecondaryActionEnd()
 {
-	if (const auto FGCharacter = GetPawn<AFGCharacter>())
-		FGCharacter->StopSecondaryAction();
+	if (const auto OwnedCharacter = GetPawn<AFGCharacter>())
+		OwnedCharacter->StopSecondaryAction();
 }
 
 void AFGPlayerController::CharacterJump()
 {
-	if (!IsValid(GetCharacter())) return;
-
-	GetCharacter()->Jump();
+	if (const auto OwnedCharacter = GetPawn<AFGCharacter>())
+		OwnedCharacter->Jump();
 }
 
 void AFGPlayerController::CharacterCrouchToggle()
 {
-	if (!IsValid(GetCharacter())) return;
-
-	if (GetCharacter()->bIsCrouched)
-		GetCharacter()->UnCrouch();
-	else
-		GetCharacter()->Crouch();
+	if (const auto OwnedCharacter = GetPawn<AFGCharacter>())
+	{
+		if (OwnedCharacter->bIsCrouched)
+			OwnedCharacter->UnCrouch();
+		else
+			OwnedCharacter->Crouch();
+	}
 }
 
 void AFGPlayerController::CharacterMoveForward(const float Value)
@@ -132,8 +157,8 @@ AEquippableItem* AFGPlayerController::SpawnAndEquipNewItem(TSubclassOf<AEquippab
 
 	if (const auto SpawnedItem = World->SpawnActor<AEquippableItem>(Item))
 	{
-		if (auto OwnedPawn = GetPawn<AFGCharacter>())
-			OwnedPawn->EquipItem(SpawnedItem);
+		if (auto OwnedCharacter = GetPawn<AFGCharacter>())
+			OwnedCharacter->EquipItem(SpawnedItem);
 
 		return SpawnedItem;
 	}
@@ -155,4 +180,33 @@ void AFGPlayerController::SetupHUDWidget()
 		HUDWidgetInstance->RemoveFromParent();
 		HUDWidgetInstance->AddToViewport();
 	}
+}
+
+void AFGPlayerController::HandlePlayerDeath()
+{
+	if (bIsDead) return;
+	bIsDead = true;
+
+	if (IsValid(HUDWidgetInstance))
+	{
+		HUDWidgetInstance->RemoveFromParent();
+	}
+
+	if (!IsValid(DeathWidgetInstance))
+	{
+		DeathWidgetInstance = CreateWidget<UUserWidget>(this, DeathWidgetClass);
+	}
+
+	if (IsValid(DeathWidgetInstance))
+		DeathWidgetInstance->AddToViewport();
+
+	if (const auto OwnedCharacter = GetPawn<AFGCharacter>())
+	{
+		OwnedCharacter->UnEquipItem();
+
+		if (const auto CharacterMesh = OwnedCharacter->GetMesh())
+			CharacterMesh->SetAnimationMode(EAnimationMode::AnimationBlueprint);
+	}
+
+	DisableInput(this);
 }

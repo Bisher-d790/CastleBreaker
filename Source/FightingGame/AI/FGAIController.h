@@ -19,6 +19,9 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+
+	virtual void OnPossess(APawn* InPawn) override;
+	virtual void OnUnPossess() override;
 #pragma endregion Overrides
 
 #pragma region EquippableItem
@@ -32,4 +35,13 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "EquippableItem")
 	bool bEquipItemOnBeginPlay = true;
 #pragma endregion EquippableItem
+
+
+#pragma region Death
+protected:
+	UFUNCTION() void HandleDeath();
+
+	UPROPERTY(EditDefaultsOnly, Category = "Death")
+	float DestroyTimeAfterDeath = 2.f;
+#pragma region Death
 };

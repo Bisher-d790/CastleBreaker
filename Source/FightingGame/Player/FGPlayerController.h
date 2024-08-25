@@ -21,6 +21,10 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	virtual void OnPossess(APawn* InPawn) override;
+
+	virtual void OnUnPossess() override;
+
 	virtual void SetupInputComponent() override;
 #pragma endregion Overrides
 
@@ -118,4 +122,16 @@ protected:
 
 	UPROPERTY() UUserWidget* HUDWidgetInstance = nullptr;
 #pragma endregion UI
+
+#pragma region Death
+protected:
+	UFUNCTION() void HandlePlayerDeath();
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI|Death")
+	TSubclassOf<UUserWidget> DeathWidgetClass = nullptr;
+
+	UPROPERTY() UUserWidget* DeathWidgetInstance = nullptr;
+
+	UPROPERTY() bool bIsDead = false;
+#pragma endregion Death
 };
