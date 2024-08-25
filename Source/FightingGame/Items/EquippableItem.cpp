@@ -37,6 +37,23 @@ void AEquippableItem::Tick(float DeltaTime)
 	}
 }
 
+void AEquippableItem::OnItemEquipped(AActor* OwnerActor)
+{
+	if (!IsValid(OwnerActor))
+	{
+		OnItemUnequipped();
+		return;
+	}
+
+	SetOwner(OwnerActor);
+}
+
+void AEquippableItem::OnItemUnequipped()
+{
+	SetOwner(nullptr);
+	DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+}
+
 void AEquippableItem::StartPrimaryAction()
 {
 	PrimaryActionTimeActive = 0.f;

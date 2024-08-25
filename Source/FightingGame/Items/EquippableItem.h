@@ -43,6 +43,15 @@ protected:
 	USphereComponent* Collision = nullptr;
 #pragma endregion Components
 
+#pragma region Equipping
+public:
+	UFUNCTION(BlueprintCallable, Category = "Equipping")
+	void OnItemEquipped(AActor* OwnerActor);
+
+	UFUNCTION(BlueprintCallable, Category = "Equipping")
+	void OnItemUnequipped();
+#pragma endregion Equipping
+
 #pragma region Actions
 public:
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAction, const bool, bHasStarted);

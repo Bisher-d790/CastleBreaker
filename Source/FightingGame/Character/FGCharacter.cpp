@@ -85,7 +85,9 @@ void AFGCharacter::EquipItem(AEquippableItem* Item)
 
 	const auto OldItem = EquippedItem;
 	EquippedItem = Item;
-	EquippedItem->SetOwner(this);
+
+	EquippedItem->OnItemEquipped(this);
+
 	if (GetMesh())
 		EquippedItem->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, EquippedItemSocket);
 
@@ -96,11 +98,11 @@ void AFGCharacter::UnEquipItem()
 {
 	if (!IsValid(EquippedItem)) return;
 
-	EquippedItem->SetOwner(nullptr);
-	EquippedItem->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	EquippedItem->OnItemUnequipped();
 
 	const auto Item = EquippedItem;
 	EquippedItem = nullptr;
+
 	OnEquippedItemChanged.Broadcast(Item, EquippedItem);
 }
 
