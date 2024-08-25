@@ -2,6 +2,7 @@
 
 // Engine
 #include "AIModule/Classes/BehaviorTree/BehaviorTree.h"
+#include "AIModule/Classes/BehaviorTree/BlackboardComponent.h"
 
 // Project
 #include "FightingGame/Character/FGCharacter.h"
@@ -51,6 +52,23 @@ void AFGAIController::OnUnPossess()
 	}
 
 	Super::OnUnPossess();
+}
+
+void AFGAIController::EnemyDetected(APawn* Enemy)
+{
+	if (!IsValid(Enemy)) return;
+
+	const auto EnemyCharacter = Cast<AFGCharacter>(Enemy);
+	if (!IsValid(EnemyCharacter)) return;
+
+	SetTargetEnemy(EnemyCharacter);
+
+	if (IsValid(Blackboard))
+	{
+		Blackboard->SetValueAsObject(TargetEnemyBlackboard, Enemy);
+	}
+
+	OnEnemyDetected.Broadcast(Enemy);
 }
 
 AEquippableItem* AFGAIController::SpawnAndEquipNewItem(TSubclassOf<AEquippableItem> Item)
