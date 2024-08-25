@@ -7,6 +7,7 @@
 #include "FightingGame/Character/FGCharacter.h"
 #include "FightingGame/Items/EquippableItem.h"
 #include "FightingGame/Components/HealthComponent.h"
+#include "FightingGame/Player/FGPlayerState.h"
 
 
 void AFGPlayerController::BeginPlay()
@@ -209,4 +210,14 @@ void AFGPlayerController::HandlePlayerDeath()
 	}
 
 	DisableInput(this);
+}
+
+void AFGPlayerController::EnemyKilled(const AActor* KilledEnemy)
+{
+	if (const auto PS = GetPlayerState<AFGPlayerState>())
+	{
+		PS->AddKills(1);
+
+		OnEnemyKilled.Broadcast(KilledEnemy);
+	}
 }

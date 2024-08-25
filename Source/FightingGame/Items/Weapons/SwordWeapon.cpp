@@ -2,7 +2,10 @@
 
 // Engine
 #include "Components/CapsuleComponent.h"
+
+// Project
 #include "FightingGame/Interfaces/DamageableInterface.h"
+#include "FightingGame/Player/FGPlayerController.h"
 
 
 ASwordWeapon::ASwordWeapon()
@@ -49,5 +52,12 @@ void ASwordWeapon::HandleBladeBeginOverlap(UPrimitiveComponent* OverlappedCompon
 		DamageableActor->TakeDamage(AttackDamage);
 
 		AttackedActors.Add(OtherActor);
+
+		// If damaged actor is killed
+		if (DamageableActor->GetHealth() <= 0.f && GetOwner())
+		{
+			if (const auto OwnerPC = GetOwner()->GetInstigatorController<AFGPlayerController>())
+				OwnerPC->EnemyKilled(OtherActor);
+		}
 	}
 }

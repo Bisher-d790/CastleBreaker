@@ -23,5 +23,7 @@ public:
 
 	virtual void Heal(const float HealAmount) = 0;
 
+	virtual float GetHealth() const { return 0.f; };
+
 	virtual FORCEINLINE UHealthComponent* GetHealthComponent() const { return nullptr; };
 };

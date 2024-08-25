@@ -94,6 +94,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Health")
 	virtual void Heal(const float HealAmount) override;
 
+	UFUNCTION(BlueprintCallable, Category = "Health")
+	virtual float GetHealth() const override;
+
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Health")
 	UHealthComponent* HealthComponent = nullptr;

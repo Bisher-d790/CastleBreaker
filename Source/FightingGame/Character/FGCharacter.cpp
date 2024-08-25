@@ -121,3 +121,13 @@ void AFGCharacter::Heal(const float HealAmount)
 		HealthComponent->Heal(HealAmount);
 	}
 }
+
+float AFGCharacter::GetHealth() const
+{
+	if (IsValid(HealthComponent))
+	{
+		return HealthComponent->GetHealth();
+	}
+
+	return 0.0f;
+}

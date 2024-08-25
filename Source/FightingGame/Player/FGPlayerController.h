@@ -134,4 +134,13 @@ protected:
 
 	UPROPERTY() bool bIsDead = false;
 #pragma endregion Death
+
+#pragma region Kill
+public:
+	UFUNCTION(BlueprintCallable, Category = "Kill")
+	void EnemyKilled(const AActor* KilledEnemy);
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEnemyKilled, const AActor*, KilledEnemy);
+	FOnEnemyKilled OnEnemyKilled;
+#pragma endregion Kill
 };
