@@ -1,5 +1,8 @@
 #include "FGAIController.h"
 
+// Engine
+#include "AIModule/Classes/BehaviorTree/BehaviorTree.h"
+
 // Project
 #include "FightingGame/Character/FGCharacter.h"
 #include "FightingGame/Items/EquippableItem.h"
@@ -30,6 +33,11 @@ void AFGAIController::OnPossess(APawn* InPawn)
 		if (const auto HealthComponent = OwnedCharacter->GetHealthComponent())
 			if (HealthComponent->OnDeath.IsAlreadyBound(this, &ThisClass::HandleDeath))
 				HealthComponent->OnDeath.RemoveDynamic(this, &ThisClass::HandleDeath);
+	}
+
+	if (bStartAILogicOnPossess && IsValid(BehaviorTree))
+	{
+		RunBehaviorTree(BehaviorTree);
 	}
 }
 
