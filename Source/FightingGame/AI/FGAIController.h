@@ -30,25 +30,6 @@ protected:
 	UBehaviorTree* BehaviorTree = nullptr;
 #pragma endregion AI
 
-#pragma region Enemy
-public:
-	void EnemyDetected(APawn* Enemy);
-
-	UFUNCTION(BlueprintPure, Category = "AI|Enemy")
-	FORCEINLINE AFGCharacter* GetTargetEnemy() const { return TargetEnemy; }
-
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEnemyDetected, APawn*, DetectedEnemy);
-	FOnEnemyDetected OnEnemyDetected;
-
-protected:
-	void SetTargetEnemy(AFGCharacter* Enemy) { TargetEnemy = Enemy; }
-
-	UPROPERTY() AFGCharacter* TargetEnemy = nullptr;
-
-	UPROPERTY(EditDefaultsOnly, Category = "AI|Enemy")
-	FName TargetEnemyBlackboard = "TargetEnemy";
-#pragma endregion Enemy
-
 #pragma region EquippableItem
 public:
 	AEquippableItem* SpawnAndEquipNewItem(TSubclassOf<AEquippableItem> Item);

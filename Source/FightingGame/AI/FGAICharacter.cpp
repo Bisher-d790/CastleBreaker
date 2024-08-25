@@ -5,9 +5,6 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Perception/PawnSensingComponent.h"
 
-// Project
-#include "FightingGame/AI/FGAIController.h"
-
 
 AFGAICharacter::AFGAICharacter()
 {
@@ -26,15 +23,5 @@ void AFGAICharacter::BeginPlay()
 	if (IsValid(PawnSensingComponent))
 	{
 		PawnSensingComponent->OnSeePawn.AddDynamic(this, &AFGAICharacter::HandlePawnSeen);
-	}
-}
-
-void AFGAICharacter::HandlePawnSeen(APawn* Pawn)
-{
-	if (!IsValid(Pawn)) return;
-
-	if (const auto AIC = GetController<AFGAIController>())
-	{
-		AIC->EnemyDetected(Pawn);
 	}
 }

@@ -33,6 +33,6 @@ protected:
 
 #pragma region Sensing
 protected:
-	UFUNCTION() void HandlePawnSeen(APawn* Pawn);
+	UFUNCTION() virtual void HandlePawnSeen(APawn* Pawn) {};
 #pragma endregion Sensing
 };
