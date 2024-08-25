@@ -24,6 +24,8 @@ public:
 	AFGCharacter();
 
 protected:
+	virtual void BeginPlay() override;
+
 	virtual float InternalTakeRadialDamage(float Damage, struct FRadialDamageEvent const& RadialDamageEvent, class AController* EventInstigator, AActor* DamageCauser);
 	virtual float InternalTakePointDamage(float Damage, struct FPointDamageEvent const& PointDamageEvent, class AController* EventInstigator, AActor* DamageCauser);
 #pragma endregion Overrides
@@ -96,6 +98,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Health")
 	virtual float GetHealth() const override;
+
+	// Update the health bar that is visible only for other players
+	UFUNCTION(BlueprintImplementableEvent, Category = "Health|HealthBar")
+	void UpdateHealthBar();
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Health")

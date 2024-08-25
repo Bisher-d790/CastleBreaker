@@ -41,6 +41,13 @@ AFGCharacter::AFGCharacter()
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
 }
 
+void AFGCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	UpdateHealthBar();
+}
+
 float AFGCharacter::InternalTakeRadialDamage(float Damage, FRadialDamageEvent const& RadialDamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	const float ActualDamage = Super::InternalTakeRadialDamage(Damage, RadialDamageEvent, EventInstigator, DamageCauser);
@@ -112,6 +119,8 @@ void AFGCharacter::TakeDamage(const float Damage)
 	{
 		HealthComponent->Damage(Damage);
 	}
+
+	UpdateHealthBar();
 }
 
 void AFGCharacter::Heal(const float HealAmount)
@@ -120,6 +129,8 @@ void AFGCharacter::Heal(const float HealAmount)
 	{
 		HealthComponent->Heal(HealAmount);
 	}
+
+	UpdateHealthBar();
 }
 
 float AFGCharacter::GetHealth() const
