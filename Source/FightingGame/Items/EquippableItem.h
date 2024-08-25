@@ -7,7 +7,7 @@
 #include "EquippableItem.generated.h"
 
 class UMeshComponent;
-class USphereComponent;
+class UBoxComponent;
 
 /// <summary>
 /// Base class for any item that could be equipped,
@@ -31,16 +31,18 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Components")
 	FORCEINLINE UMeshComponent* GetMesh() const { return Mesh; }
 
-	// Could be used for Pick up functionality later on
 	UFUNCTION(BlueprintPure, Category = "Components")
-	FORCEINLINE USphereComponent* GetCollision() const { return Collision; }
+	FORCEINLINE UBoxComponent* GetCollision() const { return Collision; }
+
+	UFUNCTION(BlueprintCallable, Category = "Components|Collision")
+	void SetItemSimulatePhysics(const bool bIsEnabled);
 
 protected:
 	UPROPERTY(EditAnywhere, Category = "Components")
 	UMeshComponent* Mesh = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = "Components")
-	USphereComponent* Collision = nullptr;
+	UBoxComponent* Collision = nullptr;
 #pragma endregion Components
 
 #pragma region Equipping

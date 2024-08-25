@@ -1,7 +1,7 @@
 #include "EquippableItem.h"
 
 // Engine
-#include "Components/SphereComponent.h"
+#include "Components/BoxComponent.h"
 
 // Project
 
@@ -12,7 +12,11 @@ AEquippableItem::AEquippableItem()
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
 
-	Collision = CreateDefaultSubobject<USphereComponent>(TEXT("Collision"));
+	Collision = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision"));
+	Collision->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
+	Collision->SetSimulatePhysics(true);
+	Collision->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	Collision->SetCollisionResponseToAllChannels(ECR_Block);
 	SetRootComponent(Collision);
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
@@ -37,6 +41,22 @@ void AEquippableItem::Tick(float DeltaTime)
 	}
 }
 
+void AEquippableItem::SetItemSimulatePhysics(const bool bIsEnabled)
+{
+	if (!IsValid(Collision)) return;
+
+	if (bIsEnabled)
+	{
+		Collision->SetSimulatePhysics(true);
+		Collision->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	}
+	else
+	{
+		Collision->SetSimulatePhysics(false);
+		Collision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
+}
+
 void AEquippableItem::OnItemEquipped(AActor* OwnerActor)
 {
 	if (!IsValid(OwnerActor))
@@ -46,12 +66,16 @@ void AEquippableItem::OnItemEquipped(AActor* OwnerActor)
 	}
 
 	SetOwner(OwnerActor);
+
+	SetItemSimulatePhysics(false);
 }
 
 void AEquippableItem::OnItemUnequipped()
 {
 	SetOwner(nullptr);
 	DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+
+	SetItemSimulatePhysics(true);
 }
 
 void AEquippableItem::StartPrimaryAction()
