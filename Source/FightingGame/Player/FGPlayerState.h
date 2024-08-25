@@ -11,18 +11,27 @@ class FIGHTINGGAME_API AFGPlayerState : public APlayerState
 {
 	GENERATED_BODY()
 
-#pragma region Kills
+#pragma region KillCount
 public:
-	UFUNCTION(BlueprintPure, Category = "Kills")
-	FORCEINLINE int32 GetKillCount() const { return Kills; }
+	UFUNCTION(BlueprintPure, Category = "KillCount")
+	FORCEINLINE int32 GetKillCount() const { return KillCount; }
 
-	UFUNCTION(BlueprintCallable, Category = "Kills")
-	void AddKills(const int32 AddedKills) { Kills += AddedKills; }
+	UFUNCTION(BlueprintCallable, Category = "KillCount")
+	void AddKills(const int32 AddedKills) { SetKillCount(KillCount + AddedKills); }
 
-	UFUNCTION(BlueprintCallable, Category = "Kills")
-	void ResetKills() { Kills = 0; }
+	UFUNCTION(BlueprintCallable, Category = "KillCount")
+	void ResetKillCount() { SetKillCount(0); }
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnKillsChanged, const int32, KillCount);
+	FOnKillsChanged OnKillCountChanged;
 
 protected:
-	UPROPERTY() int32 Kills = 0;
-#pragma region Kills
+	UPROPERTY() int32 KillCount = 0;
+
+private:
+	inline void SetKillCount(const int32 Count) {
+		KillCount = Count;
+		OnKillCountChanged.Broadcast(Count);
+	}
+#pragma region KillCount
 };

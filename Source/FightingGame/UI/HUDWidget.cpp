@@ -3,6 +3,7 @@
 // Project
 #include "FightingGame/Interfaces/DamageableInterface.h"
 #include "FightingGame/Components/HealthComponent.h"
+#include "FightingGame/Player/FGPlayerState.h"
 
 
 void UHUDWidget::NativeConstruct()
@@ -22,6 +23,12 @@ void UHUDWidget::NativeConstruct()
 				UpdateHealth(HealthComp->GetHealth(), 0);
 			}
 		}
+
+		if (const auto PS = Pawn->GetPlayerState<AFGPlayerState>())
+		{
+			if (!PS->OnKillCountChanged.IsAlreadyBound(this, &ThisClass::UpdateKillCount))
+				PS->OnKillCountChanged.AddDynamic(this, &ThisClass::UpdateKillCount);
+		}
 	}
 }
 
@@ -38,6 +45,12 @@ void UHUDWidget::NativeDestruct()
 				if (HealthComp->OnHealthChanged.IsAlreadyBound(this, &ThisClass::UpdateHealth))
 					HealthComp->OnHealthChanged.RemoveDynamic(this, &ThisClass::UpdateHealth);
 			}
+		}
+
+		if (const auto PS = Pawn->GetPlayerState<AFGPlayerState>())
+		{
+			if (PS->OnKillCountChanged.IsAlreadyBound(this, &ThisClass::UpdateKillCount))
+				PS->OnKillCountChanged.RemoveDynamic(this, &ThisClass::UpdateKillCount);
 		}
 	}
 }

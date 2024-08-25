@@ -25,4 +25,10 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "HealthBar")
 	float MaxHealth = 100.f;
 #pragma endregion HealthBar
+
+#pragma region KillCount
+protected:
+	UFUNCTION(BlueprintImplementableEvent, Category = "KillCount")
+	void UpdateKillCount(const int32 Kills);
+#pragma endregion KillCount
 };
