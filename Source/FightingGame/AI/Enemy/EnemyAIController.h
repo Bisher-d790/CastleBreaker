@@ -22,7 +22,7 @@ public:
 	FOnEnemyDetected OnEnemyDetected;
 
 protected:
-	void SetTargetEnemy(APawn* Enemy) { TargetEnemy = Enemy; }
+	void SetTargetEnemy(APawn* Enemy);
 
 	UPROPERTY() APawn* TargetEnemy = nullptr;
 

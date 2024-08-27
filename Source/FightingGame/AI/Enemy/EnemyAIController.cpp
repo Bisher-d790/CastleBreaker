@@ -24,3 +24,9 @@ void AEnemyAIController::EnemyDetected(APawn* Enemy)
 
 	OnEnemyDetected.Broadcast(Enemy);
 }
+
+void AEnemyAIController::SetTargetEnemy(APawn* Enemy)
+{
+	TargetEnemy = Enemy;
+	SetFocus(TargetEnemy);
+}
