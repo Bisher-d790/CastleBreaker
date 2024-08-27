@@ -7,6 +7,7 @@
 #include "FGAICharacter.generated.h"
 
 class UPawnSensingComponent;
+class UNavigationInvokerComponent;
 
 UCLASS()
 class FIGHTINGGAME_API AFGAICharacter : public AFGCharacter
@@ -29,6 +30,9 @@ public:
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 	UPawnSensingComponent* PawnSensingComponent = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
+	UNavigationInvokerComponent* NavigationInvokerComponent = nullptr;
 #pragma endregion Components
 
 #pragma region Sensing

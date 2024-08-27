@@ -4,6 +4,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Perception/PawnSensingComponent.h"
+#include "NavigationSystem/Public/NavigationInvokerComponent.h"
 
 
 AFGAICharacter::AFGAICharacter()
@@ -14,6 +15,7 @@ AFGAICharacter::AFGAICharacter()
 
 	// Setup components
 	PawnSensingComponent = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensingComponent"));
+	NavigationInvokerComponent = CreateDefaultSubobject<UNavigationInvokerComponent>(TEXT("NavigationInvoker"));
 }
 
 void AFGAICharacter::BeginPlay()
