@@ -30,12 +30,9 @@ protected:
 	// Variable in which the found random point is saved
 	UPROPERTY(EditAnywhere, Category = Blackboard)
 	FBlackboardKeySelector TargetLocationKey;
-#pragma endregion Overrides
 
-#pragma region Settings
-protected:
 	// Radius in which the random point has to be found
-	UPROPERTY(EditAnywhere, Category = "Settings")
-	float Radius = 1500.f;
-#pragma endregion Settings
+	UPROPERTY(EditAnywhere, Category = Blackboard)
+	FBlackboardKeySelector RadiusKey;
+#pragma endregion Overrides
 };

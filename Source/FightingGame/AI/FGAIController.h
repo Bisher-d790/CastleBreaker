@@ -6,6 +6,8 @@
 
 #include "FGAIController.generated.h"
 
+class UDataTable;
+
 UCLASS()
 class FIGHTINGGAME_API AFGAIController : public AAIController
 {
@@ -25,6 +27,17 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "AI|BehaviorTree")
 	UBehaviorTree* BehaviorTree = nullptr;
 #pragma endregion AI
+
+#pragma region Settings
+protected:
+	virtual void SetupSettingsFromDT() {};
+
+	UPROPERTY(EditDefaultsOnly, Category = "AI|Settings")
+	UDataTable* SettingsTable = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, Category = "AI|Settings")
+	FString SettingsRow = "Default";
+#pragma endregion Settings
 
 #pragma region Death
 protected:

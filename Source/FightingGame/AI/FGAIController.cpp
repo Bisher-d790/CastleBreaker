@@ -23,6 +23,8 @@ void AFGAIController::OnPossess(APawn* InPawn)
 	if (bStartAILogicOnPossess && IsValid(BehaviorTree))
 	{
 		RunBehaviorTree(BehaviorTree);
+
+		SetupSettingsFromDT();
 	}
 }
 

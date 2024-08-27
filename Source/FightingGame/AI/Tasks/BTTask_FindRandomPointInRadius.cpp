@@ -16,15 +16,16 @@ UBTTask_FindRandomPointInRadius::UBTTask_FindRandomPointInRadius(FObjectInitiali
 	OriginLocationKey.AddObjectFilter(this, GET_MEMBER_NAME_CHECKED(UBTTask_FindRandomPointInRadius, OriginLocationKey), AActor::StaticClass());
 	OriginLocationKey.AddVectorFilter(this, GET_MEMBER_NAME_CHECKED(UBTTask_FindRandomPointInRadius, OriginLocationKey));
 	TargetLocationKey.AddVectorFilter(this, GET_MEMBER_NAME_CHECKED(UBTTask_FindRandomPointInRadius, TargetLocationKey));
+	RadiusKey.AddFloatFilter(this, GET_MEMBER_NAME_CHECKED(UBTTask_FindRandomPointInRadius, RadiusKey));
 }
 
 FString UBTTask_FindRandomPointInRadius::GetStaticDescription() const
 {
 	return Super::GetStaticDescription() +
-		FString::Printf(TEXT("\nRadius: %0.1lf\nOrigin Location: %s\nTarget Location: %s"),
-			Radius,
+		FString::Printf(TEXT("\nOrigin Location: %s\nTarget Location: %s\nRadius: %s"),
 			*OriginLocationKey.SelectedKeyName.ToString(),
-			*TargetLocationKey.SelectedKeyName.ToString());
+			*TargetLocationKey.SelectedKeyName.ToString(),
+			*RadiusKey.SelectedKeyName.ToString());
 }
 
 EBTNodeResult::Type UBTTask_FindRandomPointInRadius::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -53,6 +54,8 @@ EBTNodeResult::Type UBTTask_FindRandomPointInRadius::ExecuteTask(UBehaviorTreeCo
 	{
 		OriginLocation = BlackboardComponent->GetValueAsVector(OriginLocationKey.SelectedKeyName);
 	}
+
+	const auto Radius = BlackboardComponent->GetValueAsFloat(RadiusKey.SelectedKeyName);
 
 	// Null Checks, and get random location
 	if (!IsValid(BlackboardComponent) || !IsValid(NavSystem) ||

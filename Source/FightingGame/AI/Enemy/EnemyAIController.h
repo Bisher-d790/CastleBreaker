@@ -6,10 +6,19 @@
 
 #include "EnemyAIController.generated.h"
 
+
 UCLASS()
 class FIGHTINGGAME_API AEnemyAIController : public AFGAIController
 {
 	GENERATED_BODY()
+
+#pragma region Settings
+protected:
+	virtual void SetupSettingsFromDT() override;
+
+	UPROPERTY(EditDefaultsOnly, Category = "AI|Settings|Blackboard")
+	FName PatrolRadiusBlackboard = "PatrolRadius";
+#pragma endregion Settings
 
 #pragma region Enemy
 public:
@@ -29,5 +38,4 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "AI|Enemy")
 	FName TargetEnemyBlackboard = "TargetEnemy";
 #pragma endregion Enemy
-
 };

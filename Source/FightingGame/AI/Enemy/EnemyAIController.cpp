@@ -5,7 +5,21 @@
 
 // Project
 #include "FightingGame/AI/Enemy/EnemyCharacter.h"
+#include "FightingGame/Data/EnemySettings.h"
 
+
+void AEnemyAIController::SetupSettingsFromDT()
+{
+	Super::SetupSettingsFromDT();
+
+	if (!SettingsTable || !IsValid(Blackboard)) return;
+
+	const auto EnemySettings = SettingsTable->FindRow<FEnemySettings>(FName(SettingsRow), SettingsRow);
+	if (!EnemySettings) return;
+
+
+	Blackboard->SetValueAsFloat(PatrolRadiusBlackboard, EnemySettings->PatrolRadius);
+}
 
 void AEnemyAIController::EnemyDetected(APawn* Enemy)
 {
