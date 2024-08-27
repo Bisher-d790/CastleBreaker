@@ -62,13 +62,15 @@ public:
 	virtual void StopSecondaryAction();
 #pragma endregion Actions
 
-#pragma region Item
+#pragma region EquippedItem
 public:
 	template<class T>
 	inline T* GetEquippedItem() const { return Cast<T>(EquippedItem); }
 
 	UFUNCTION(BlueprintPure, Category = "EquippedItem")
 	FORCEINLINE AEquippableItem* GetEquippedItem() const { return EquippedItem; }
+
+	AEquippableItem* SpawnAndEquipNewItem(TSubclassOf<AEquippableItem> Item);
 
 	void EquipItem(AEquippableItem* Item);
 	void UnEquipItem();
@@ -78,12 +80,18 @@ public:
 	FOnEquippedItemChanged OnEquippedItemChanged;
 
 protected:
+	UPROPERTY(EditDefaultsOnly, Category = "EquippedItem")
+	TSubclassOf<AEquippableItem> ItemToEquipOnBeginPlay = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, Category = "EquippedItem")
+	bool bEquipItemOnBeginPlay = true;
+
 	UPROPERTY() AEquippableItem* EquippedItem = nullptr;
 
 	// The socket name to connect the item to the Skeleton
 	UPROPERTY(EditDefaultsOnly, Category = "EquippedItem|Socket")
 	FName EquippedItemSocket = "WeaponSocket";
-#pragma endregion Item
+#pragma endregion EquippedItem
 
 #pragma region Health
 public:

@@ -46,6 +46,11 @@ void AFGCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	UpdateHealthBar();
+
+	if (bEquipItemOnBeginPlay)
+	{
+		SpawnAndEquipNewItem(ItemToEquipOnBeginPlay);
+	}
 }
 
 float AFGCharacter::InternalTakeRadialDamage(float Damage, FRadialDamageEvent const& RadialDamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -84,6 +89,22 @@ void AFGCharacter::StopSecondaryAction()
 {
 	if (IsValid(EquippedItem))
 		EquippedItem->StopSecondaryAction();
+}
+
+
+AEquippableItem* AFGCharacter::SpawnAndEquipNewItem(TSubclassOf<AEquippableItem> Item)
+{
+	const auto World = GetWorld();
+	if (!IsValid(Item) || !IsValid(World)) return nullptr;
+
+	if (const auto SpawnedItem = World->SpawnActor<AEquippableItem>(Item))
+	{
+		EquipItem(SpawnedItem);
+
+		return SpawnedItem;
+	}
+
+	return nullptr;
 }
 
 void AFGCharacter::EquipItem(AEquippableItem* Item)

@@ -19,8 +19,6 @@ public:
 	AFGPlayerController() = default;
 
 protected:
-	virtual void BeginPlay() override;
-
 	virtual void OnPossess(APawn* InPawn) override;
 
 	virtual void OnUnPossess() override;
@@ -97,18 +95,6 @@ protected:
 	/** Called for side to side input */
 	void CharacterMoveRight(const float Value);
 #pragma endregion Movement
-
-#pragma region EquippableItem
-public:
-	AEquippableItem* SpawnAndEquipNewItem(TSubclassOf<AEquippableItem> Item);
-
-protected:
-	UPROPERTY(EditDefaultsOnly, Category = "EquippableItem")
-	TSubclassOf<AEquippableItem> ItemToEquipOnBeginPlay = nullptr;
-
-	UPROPERTY(EditDefaultsOnly, Category = "EquippableItem")
-	bool bEquipItemOnBeginPlay = true;
-#pragma endregion EquippableItem
 
 #pragma region UI
 protected:

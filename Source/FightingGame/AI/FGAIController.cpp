@@ -9,21 +9,6 @@
 #include "FightingGame/Components/HealthComponent.h"
 
 
-void AFGAIController::BeginPlay()
-{
-	Super::BeginPlay();
-
-	if (bEquipItemOnBeginPlay)
-		SpawnAndEquipNewItem(ItemToEquipOnBeginPlay);
-
-	if (auto OwnedCharacter = GetPawn<AFGAICharacter>())
-	{
-		if (const auto HealthComponent = OwnedCharacter->GetHealthComponent())
-			if (!HealthComponent->OnDeath.IsAlreadyBound(this, &ThisClass::HandleDeath))
-				HealthComponent->OnDeath.AddDynamic(this, &ThisClass::HandleDeath);
-	}
-}
-
 void AFGAIController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
@@ -31,8 +16,8 @@ void AFGAIController::OnPossess(APawn* InPawn)
 	if (const auto OwnedCharacter = Cast<AFGAICharacter>(InPawn))
 	{
 		if (const auto HealthComponent = OwnedCharacter->GetHealthComponent())
-			if (HealthComponent->OnDeath.IsAlreadyBound(this, &ThisClass::HandleDeath))
-				HealthComponent->OnDeath.RemoveDynamic(this, &ThisClass::HandleDeath);
+			if (!HealthComponent->OnDeath.IsAlreadyBound(this, &ThisClass::HandleDeath))
+				HealthComponent->OnDeath.AddDynamic(this, &ThisClass::HandleDeath);
 	}
 
 	if (bStartAILogicOnPossess && IsValid(BehaviorTree))
@@ -51,22 +36,6 @@ void AFGAIController::OnUnPossess()
 	}
 
 	Super::OnUnPossess();
-}
-
-AEquippableItem* AFGAIController::SpawnAndEquipNewItem(TSubclassOf<AEquippableItem> Item)
-{
-	const auto World = GetWorld();
-	if (!IsValid(Item) || !IsValid(World)) return nullptr;
-
-	if (const auto SpawnedItem = World->SpawnActor<AEquippableItem>(Item))
-	{
-		if (const auto OwnedCharacter = GetPawn<AFGAICharacter>())
-			OwnedCharacter->EquipItem(SpawnedItem);
-
-		return SpawnedItem;
-	}
-
-	return nullptr;
 }
 
 void AFGAIController::HandleDeath()

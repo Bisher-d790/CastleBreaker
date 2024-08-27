@@ -10,17 +10,6 @@
 #include "FightingGame/Player/FGPlayerState.h"
 
 
-void AFGPlayerController::BeginPlay()
-{
-	Super::BeginPlay();
-
-	if (bEquipItemOnBeginPlay)
-		SpawnAndEquipNewItem(ItemToEquipOnBeginPlay);
-
-	if (bAddHUDOnBeginPlay)
-		SetupHUDWidget();
-}
-
 void AFGPlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
@@ -31,6 +20,9 @@ void AFGPlayerController::OnPossess(APawn* InPawn)
 			if (!HealthComponent->OnDeath.IsAlreadyBound(this, &ThisClass::HandlePlayerDeath))
 				HealthComponent->OnDeath.AddDynamic(this, &ThisClass::HandlePlayerDeath);
 	}
+
+	if (bAddHUDOnBeginPlay)
+		SetupHUDWidget();
 }
 
 void AFGPlayerController::OnUnPossess()
@@ -149,22 +141,6 @@ void AFGPlayerController::CharacterMoveRight(const float Value)
 	const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 	// add movement in that direction
 	GetCharacter()->AddMovementInput(Direction, Value);
-}
-
-AEquippableItem* AFGPlayerController::SpawnAndEquipNewItem(TSubclassOf<AEquippableItem> Item)
-{
-	const auto World = GetWorld();
-	if (!IsValid(Item) || !IsValid(World)) return nullptr;
-
-	if (const auto SpawnedItem = World->SpawnActor<AEquippableItem>(Item))
-	{
-		if (auto OwnedCharacter = GetPawn<AFGCharacter>())
-			OwnedCharacter->EquipItem(SpawnedItem);
-
-		return SpawnedItem;
-	}
-
-	return nullptr;
 }
 
 void AFGPlayerController::SetupHUDWidget()
