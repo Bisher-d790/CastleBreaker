@@ -17,8 +17,9 @@ void AEnemyAIController::SetupSettingsFromDT()
 	const auto EnemySettings = SettingsTable->FindRow<FEnemySettings>(FName(SettingsRow), SettingsRow);
 	if (!EnemySettings) return;
 
-
 	Blackboard->SetValueAsFloat(PatrolRadiusBlackboard, EnemySettings->PatrolRadius);
+	Blackboard->SetValueAsFloat(MinCombatRangeBlackboard, EnemySettings->MinCombatRange);
+	Blackboard->SetValueAsFloat(MaxCombatRangeBlackboard, EnemySettings->MaxCombatRange);
 }
 
 void AEnemyAIController::EnemyDetected(APawn* Enemy)

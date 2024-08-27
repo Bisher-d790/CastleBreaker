@@ -18,6 +18,10 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "AI|Settings|Blackboard")
 	FName PatrolRadiusBlackboard = "PatrolRadius";
+	UPROPERTY(EditDefaultsOnly, Category = "AI|Settings|Blackboard")
+	FName MinCombatRangeBlackboard = "MinCombatRange";
+	UPROPERTY(EditDefaultsOnly, Category = "AI|Settings|Blackboard")
+	FName MaxCombatRangeBlackboard = "MaxCombatRange";
 #pragma endregion Settings
 
 #pragma region Enemy

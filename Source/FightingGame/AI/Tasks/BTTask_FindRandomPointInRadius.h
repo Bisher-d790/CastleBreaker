@@ -23,15 +23,12 @@ public:
 
 #pragma region Blackboard
 protected:
-	// The center of the circle in which the random point is searched
 	UPROPERTY(EditAnywhere, Category = Blackboard)
 	FBlackboardKeySelector OriginLocationKey;
 
-	// Variable in which the found random point is saved
 	UPROPERTY(EditAnywhere, Category = Blackboard)
 	FBlackboardKeySelector TargetLocationKey;
 
-	// Radius in which the random point has to be found
 	UPROPERTY(EditAnywhere, Category = Blackboard)
 	FBlackboardKeySelector RadiusKey;
 #pragma endregion Overrides
