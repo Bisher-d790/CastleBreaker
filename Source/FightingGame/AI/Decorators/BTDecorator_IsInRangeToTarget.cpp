@@ -82,7 +82,7 @@ bool UBTDecorator_IsInRangeToTarget::CalculateRawConditionValue(UBehaviorTreeCom
 	{
 		if (const auto TargetActor = Cast<AActor>(TargetObject))
 			TargetLocation = TargetActor->GetActorLocation();
-		return false;
+		else return false;
 	}
 	// If key is a vector
 	else

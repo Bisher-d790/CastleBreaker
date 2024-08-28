@@ -6,7 +6,21 @@
 // Project
 #include "FightingGame/AI/Enemy/EnemyCharacter.h"
 #include "FightingGame/Data/EnemySettings.h"
+#include "FightingGame/Items/Weapons/WeaponItem.h"
 
+
+void AEnemyAIController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (IsValid(AttackingWeapon))
+	{
+		if (!AttackingWeapon->IsAttacking())
+		{
+			FinishAttack();
+		}
+	}
+}
 
 void AEnemyAIController::SetupSettingsFromDT()
 {
@@ -43,4 +57,33 @@ void AEnemyAIController::EnemyDetected(APawn* Enemy)
 void AEnemyAIController::SetTargetEnemy(APawn* Enemy)
 {
 	TargetEnemy = Enemy;
+	SetFocus(Enemy, EAIFocusPriority::Gameplay);
+}
+
+void AEnemyAIController::StartAttack()
+{
+	if (const auto OwnerCharacter = GetPawn<AEnemyCharacter>())
+	{
+		// Get the equipped weapon
+		AttackingWeapon = OwnerCharacter->GetEquippedItem<AWeaponItem>();
+
+		if (IsValid(AttackingWeapon))
+		{
+			// Start attack
+			OwnerCharacter->StartPrimaryAction();
+
+			// Stop the primary action to avoid issues
+			OwnerCharacter->StopPrimaryAction();
+		}
+	}
+}
+
+void AEnemyAIController::FinishAttack()
+{
+	AttackingWeapon = nullptr;
+}
+
+bool AEnemyAIController::IsAttacking() const
+{
+	return (IsValid(AttackingWeapon) && AttackingWeapon->IsAttacking());
 }

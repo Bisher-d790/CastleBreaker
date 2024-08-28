@@ -4,6 +4,7 @@
 #include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "NavigationSystem.h"
+#include "DrawDebugHelpers.h"
 
 // Project
 
@@ -122,6 +123,13 @@ EBTNodeResult::Type UBTTask_FindPointInRangeToTarget::ExecuteTask(UBehaviorTreeC
 
 	// Set the target location
 	BlackboardComponent->SetValueAsVector(TargetLocationKey.SelectedKeyName, TargetLocation);
+
+	if (bDrawDebugLines)
+	{
+		DrawDebugSphere(World, DestinationLocation, MinRange, 12, FColor::Red, false, DrawDebugTime);
+		DrawDebugSphere(World, DestinationLocation, MaxRange, 12, FColor::Blue, false, DrawDebugTime);
+		DrawDebugSphere(World, TargetLocation, 100.f, 12, FColor::Yellow, false, DrawDebugTime);
+	}
 
 	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;

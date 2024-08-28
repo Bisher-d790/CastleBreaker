@@ -46,4 +46,13 @@ protected:
 	FVector FindPointInRange(const FVector& OriginLocation, const FVector& DestinationLocation, const float MinRange,
 		const float MaxRange) const;
 #pragma endregion Navigation
+
+#pragma region Debug
+protected:
+	UPROPERTY(EditAnywhere, Category = "Debug")
+	bool bDrawDebugLines = false;
+
+	UPROPERTY(EditAnywhere, Category = "Debug")
+	float DrawDebugTime = 2.f;
+#pragma endregion Debug
 };

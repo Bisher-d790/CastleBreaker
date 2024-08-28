@@ -6,11 +6,17 @@
 
 #include "EnemyAIController.generated.h"
 
+class AWeaponItem;
 
 UCLASS()
 class FIGHTINGGAME_API AEnemyAIController : public AFGAIController
 {
 	GENERATED_BODY()
+
+#pragma region Overrides
+protected:
+	virtual void Tick(float DeltaTime) override;
+#pragma endregion Overrides
 
 #pragma region Settings
 protected:
@@ -42,4 +48,18 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "AI|Enemy")
 	FName TargetEnemyBlackboard = "TargetEnemy";
 #pragma endregion Enemy
+
+#pragma region Combat
+public:
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void StartAttack();
+
+	UFUNCTION(BlueprintPure, Category = "Combat")
+	bool IsAttacking() const;
+
+protected:
+	void FinishAttack();
+
+	UPROPERTY() AWeaponItem* AttackingWeapon = nullptr;
+#pragma endregion Combat
 };
