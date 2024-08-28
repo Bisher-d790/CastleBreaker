@@ -35,6 +35,7 @@ void AEnemyAIController::SetupSettingsFromDT()
 	Blackboard->SetValueAsFloat(PatrolRadiusBlackboard, EnemySettings->PatrolRadius);
 	Blackboard->SetValueAsFloat(MinCombatRangeBlackboard, EnemySettings->MinCombatRange);
 	Blackboard->SetValueAsFloat(MaxCombatRangeBlackboard, EnemySettings->MaxCombatRange);
+	Blackboard->SetValueAsFloat(AttackDistanceBlackboard, EnemySettings->AttackDistance);
 }
 
 void AEnemyAIController::EnemyDetected(APawn* Enemy)

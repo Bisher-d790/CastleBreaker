@@ -28,6 +28,8 @@ protected:
 	FName MinCombatRangeBlackboard = "MinCombatRange";
 	UPROPERTY(EditDefaultsOnly, Category = "AI|Settings|Blackboard")
 	FName MaxCombatRangeBlackboard = "MaxCombatRange";
+	UPROPERTY(EditDefaultsOnly, Category = "AI|Settings|Blackboard")
+	FName AttackDistanceBlackboard = "AttackDistance";
 #pragma endregion Settings
 
 #pragma region Enemy

@@ -21,4 +21,7 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	float MaxCombatRange = 500.f;
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	float AttackDistance = 100.f;
 };
