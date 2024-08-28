@@ -57,11 +57,13 @@ void AEnemyAIController::EnemyDetected(APawn* Enemy)
 void AEnemyAIController::SetTargetEnemy(APawn* Enemy)
 {
 	TargetEnemy = Enemy;
-	SetFocus(Enemy, EAIFocusPriority::Gameplay);
+	SetFocus(TargetEnemy, EAIFocusPriority::Gameplay);
 }
 
 void AEnemyAIController::StartAttack()
 {
+	SetFocus(TargetEnemy, EAIFocusPriority::Gameplay);
+
 	if (const auto OwnerCharacter = GetPawn<AEnemyCharacter>())
 	{
 		// Get the equipped weapon
