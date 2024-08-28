@@ -1,7 +1,6 @@
 #include "BTDecorator_IsInRangeToTarget.h"
 
 // Engine
-#include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 // Project
@@ -54,22 +53,17 @@ FString UBTDecorator_IsInRangeToTarget::GetStaticDescription() const
 
 bool UBTDecorator_IsInRangeToTarget::CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const
 {
-	const auto World = GetWorld();
-	if (!IsValid(World)) return false;
-
-	const auto BlackboardComponent = OwnerComp.GetAIOwner() ? OwnerComp.GetAIOwner()->GetBlackboardComponent() : nullptr;
+	const auto BlackboardComponent = OwnerComp.GetBlackboardComponent();
 	if (!IsValid(BlackboardComponent)) return false;
 
 	// Get Origin Location
 	FVector OriginLocation = FVector::ZeroVector;
-	// If key is an object
 	if (const auto OriginObject = BlackboardComponent->GetValueAsObject(OriginLocationKey.SelectedKeyName))
 	{
 		if (const auto OriginActor = Cast<AActor>(OriginObject))
 			OriginLocation = OriginActor->GetActorLocation();
 		else return false;
 	}
-	// If key is a vector
 	else
 	{
 		OriginLocation = BlackboardComponent->GetValueAsVector(OriginLocationKey.SelectedKeyName);

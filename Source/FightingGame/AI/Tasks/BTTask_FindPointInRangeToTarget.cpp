@@ -1,7 +1,6 @@
 #include "BTTask_FindPointInRangeToTarget.h"
 
 // Engine
-#include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "NavigationSystem.h"
 #include "DrawDebugHelpers.h"
@@ -65,7 +64,7 @@ EBTNodeResult::Type UBTTask_FindPointInRangeToTarget::ExecuteTask(UBehaviorTreeC
 		return EBTNodeResult::Failed;
 	}
 
-	const auto BlackboardComponent = OwnerComp.GetAIOwner() ? OwnerComp.GetAIOwner()->GetBlackboardComponent() : nullptr;
+	const auto BlackboardComponent = OwnerComp.GetBlackboardComponent();
 	const auto NavigationSystem = UNavigationSystemV1::GetCurrent(World);
 	if (!IsValid(BlackboardComponent) || !IsValid(NavigationSystem))
 	{

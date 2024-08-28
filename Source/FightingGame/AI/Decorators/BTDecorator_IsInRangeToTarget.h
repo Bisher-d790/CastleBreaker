@@ -15,11 +15,11 @@ class FIGHTINGGAME_API UBTDecorator_IsInRangeToTarget : public UBTDecorator
 public:
 	UBTDecorator_IsInRangeToTarget();
 
+protected:
 	virtual void InitializeFromAsset(UBehaviorTree& Asset) override;
 
 	virtual FString GetStaticDescription() const override;
 
-protected:
 	virtual bool CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const override;
 #pragma endregion Overrides
 

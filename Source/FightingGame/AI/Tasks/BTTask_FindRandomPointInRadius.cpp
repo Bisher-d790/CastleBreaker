@@ -1,7 +1,6 @@
 #include "BTTask_FindRandomPointInRadius.h"
 
 // Engine
-#include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "NavigationSystem.h"
 
@@ -54,7 +53,7 @@ EBTNodeResult::Type UBTTask_FindRandomPointInRadius::ExecuteTask(UBehaviorTreeCo
 		return EBTNodeResult::Failed;
 	}
 
-	const auto BlackboardComponent = OwnerComp.GetAIOwner() ? OwnerComp.GetAIOwner()->GetBlackboardComponent() : nullptr;
+	const auto BlackboardComponent = OwnerComp.GetBlackboardComponent();
 	const auto NavigationSystem = UNavigationSystemV1::GetCurrent(World);
 	if (!IsValid(BlackboardComponent) || !IsValid(NavigationSystem))
 	{
@@ -85,7 +84,7 @@ EBTNodeResult::Type UBTTask_FindRandomPointInRadius::ExecuteTask(UBehaviorTreeCo
 
 	// Get random location
 	FNavLocation RandomLocation;
-	if (!NavigationSystem->GetRandomPointInNavigableRadius(OriginLocation, Radius, RandomLocation, nullptr))
+	if (!NavigationSystem->GetRandomPointInNavigableRadius(OriginLocation, Radius, RandomLocation))
 	{
 		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 		return EBTNodeResult::Failed;
