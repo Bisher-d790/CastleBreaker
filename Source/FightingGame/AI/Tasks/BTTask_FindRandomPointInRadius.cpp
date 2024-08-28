@@ -2,7 +2,6 @@
 
 // Engine
 #include "AIController.h"
-#include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "NavigationSystem.h"
 
@@ -11,6 +10,8 @@
 
 UBTTask_FindRandomPointInRadius::UBTTask_FindRandomPointInRadius(FObjectInitializer const& ObjectInitializer)
 {
+	bNotifyTick = false;
+
 	NodeName = TEXT("Find Random Point In Radius");
 
 	OriginLocationKey.AddObjectFilter(this, GET_MEMBER_NAME_CHECKED(UBTTask_FindRandomPointInRadius, OriginLocationKey), AActor::StaticClass());
@@ -28,6 +29,22 @@ FString UBTTask_FindRandomPointInRadius::GetStaticDescription() const
 			*RadiusKey.SelectedKeyName.ToString());
 }
 
+void UBTTask_FindRandomPointInRadius::InitializeFromAsset(UBehaviorTree& Asset)
+{
+	Super::InitializeFromAsset(Asset);
+
+	if (const UBlackboardData* BlackboardData = GetBlackboardAsset())
+	{
+		OriginLocationKey.ResolveSelectedKey(*BlackboardData);
+		TargetLocationKey.ResolveSelectedKey(*BlackboardData);
+		RadiusKey.ResolveSelectedKey(*BlackboardData);
+	}
+	else
+	{
+		UE_LOG(LogBehaviorTree, Warning, TEXT("Can't initialize task: %s, make sure that Behavior Tree specifies Blackboard Asset!"), *GetName());
+	}
+}
+
 EBTNodeResult::Type UBTTask_FindRandomPointInRadius::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	const auto World = GetWorld();
@@ -38,16 +55,25 @@ EBTNodeResult::Type UBTTask_FindRandomPointInRadius::ExecuteTask(UBehaviorTreeCo
 	}
 
 	const auto BlackboardComponent = OwnerComp.GetAIOwner() ? OwnerComp.GetAIOwner()->GetBlackboardComponent() : nullptr;
-	const auto NavSystem = UNavigationSystemV1::GetCurrent(World);
-	FNavLocation RandomLocation;
+	const auto NavigationSystem = UNavigationSystemV1::GetCurrent(World);
+	if (!IsValid(BlackboardComponent) || !IsValid(NavigationSystem))
+	{
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+		return EBTNodeResult::Failed;
+	}
 
 	// Get Origin Location
 	FVector OriginLocation = FVector::ZeroVector;
-	// If key is object
+	// If key is an object
 	if (const auto OriginObject = BlackboardComponent->GetValueAsObject(OriginLocationKey.SelectedKeyName))
 	{
 		if (const auto OriginActor = Cast<AActor>(OriginObject))
 			OriginLocation = OriginActor->GetActorLocation();
+		else
+		{
+			FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+			return EBTNodeResult::Failed;
+		}
 	}
 	// If key is a vector
 	else
@@ -57,9 +83,9 @@ EBTNodeResult::Type UBTTask_FindRandomPointInRadius::ExecuteTask(UBehaviorTreeCo
 
 	const auto Radius = BlackboardComponent->GetValueAsFloat(RadiusKey.SelectedKeyName);
 
-	// Null Checks, and get random location
-	if (!IsValid(BlackboardComponent) || !IsValid(NavSystem) ||
-		!NavSystem->GetRandomPointInNavigableRadius(OriginLocation, Radius, RandomLocation, nullptr))
+	// Get random location
+	FNavLocation RandomLocation;
+	if (!NavigationSystem->GetRandomPointInNavigableRadius(OriginLocation, Radius, RandomLocation, nullptr))
 	{
 		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 		return EBTNodeResult::Failed;

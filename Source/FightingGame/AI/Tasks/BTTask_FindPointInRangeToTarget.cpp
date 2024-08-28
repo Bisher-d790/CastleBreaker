@@ -37,6 +37,24 @@ FString UBTTask_FindPointInRangeToTarget::GetStaticDescription() const
 			*MaxRangeRadiusKey.SelectedKeyName.ToString());
 }
 
+void UBTTask_FindPointInRangeToTarget::InitializeFromAsset(UBehaviorTree& Asset)
+{
+	Super::InitializeFromAsset(Asset);
+
+	if (const UBlackboardData* BlackboardData = GetBlackboardAsset())
+	{
+		OriginLocationKey.ResolveSelectedKey(*BlackboardData);
+		DestinationLocationKey.ResolveSelectedKey(*BlackboardData);
+		TargetLocationKey.ResolveSelectedKey(*BlackboardData);
+		MinRangeRadiusKey.ResolveSelectedKey(*BlackboardData);
+		MaxRangeRadiusKey.ResolveSelectedKey(*BlackboardData);
+	}
+	else
+	{
+		UE_LOG(LogBehaviorTree, Warning, TEXT("Can't initialize task: %s, make sure that Behavior Tree specifies Blackboard Asset!"), *GetName());
+	}
+}
+
 EBTNodeResult::Type UBTTask_FindPointInRangeToTarget::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	const auto World = GetWorld();
@@ -47,7 +65,12 @@ EBTNodeResult::Type UBTTask_FindPointInRangeToTarget::ExecuteTask(UBehaviorTreeC
 	}
 
 	const auto BlackboardComponent = OwnerComp.GetAIOwner() ? OwnerComp.GetAIOwner()->GetBlackboardComponent() : nullptr;
-	const auto NavSystem = UNavigationSystemV1::GetCurrent(World);
+	const auto NavigationSystem = UNavigationSystemV1::GetCurrent(World);
+	if (!IsValid(BlackboardComponent) || !IsValid(NavigationSystem))
+	{
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+		return EBTNodeResult::Failed;
+	}
 
 	// Get Origin Location
 	FVector OriginLocation = FVector::ZeroVector;
@@ -56,6 +79,11 @@ EBTNodeResult::Type UBTTask_FindPointInRangeToTarget::ExecuteTask(UBehaviorTreeC
 	{
 		if (const auto OriginActor = Cast<AActor>(OriginObject))
 			OriginLocation = OriginActor->GetActorLocation();
+		else
+		{
+			FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+			return EBTNodeResult::Failed;
+		}
 	}
 	// If key is a vector
 	else
@@ -70,6 +98,11 @@ EBTNodeResult::Type UBTTask_FindPointInRangeToTarget::ExecuteTask(UBehaviorTreeC
 	{
 		if (const auto DestinationActor = Cast<AActor>(DestinationObject))
 			DestinationLocation = DestinationActor->GetActorLocation();
+		else
+		{
+			FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+			return EBTNodeResult::Failed;
+		}
 	}
 	// If key is a vector
 	else
@@ -85,7 +118,7 @@ EBTNodeResult::Type UBTTask_FindPointInRangeToTarget::ExecuteTask(UBehaviorTreeC
 	FNavLocation TargetLocation = FNavLocation(FindPointInRange(OriginLocation, DestinationLocation, MinRange, MaxRange));
 
 	// Project the point to the navigation mesh
-	NavSystem->ProjectPointToNavigation(TargetLocation, TargetLocation);
+	NavigationSystem->ProjectPointToNavigation(TargetLocation, TargetLocation);
 
 	// Set the target location
 	BlackboardComponent->SetValueAsVector(TargetLocationKey.SelectedKeyName, TargetLocation);
@@ -105,8 +138,7 @@ FVector UBTTask_FindPointInRangeToTarget::FindPointInRange(const FVector& Origin
 	float DistanceToTarget = 0.f;
 
 	// Get the normal directional vector pointing from the Origin to the Destination
-	TargetLocation = DestinationLocation - OriginLocation;
-	TargetLocation.Normalize();
+	TargetLocation = (DestinationLocation - OriginLocation).GetSafeNormal();
 
 	// If closer, point backwards
 	if (DistanceToDestination <= MinRange)

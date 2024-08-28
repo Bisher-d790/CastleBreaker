@@ -43,5 +43,4 @@ void AEnemyAIController::EnemyDetected(APawn* Enemy)
 void AEnemyAIController::SetTargetEnemy(APawn* Enemy)
 {
 	TargetEnemy = Enemy;
-	SetFocus(TargetEnemy);
 }

@@ -16,7 +16,10 @@ class FIGHTINGGAME_API UBTTask_FindRandomPointInRadius : public UBTTaskNode
 public:
 	UBTTask_FindRandomPointInRadius(FObjectInitializer const& ObjectInitializer);
 
+protected:
 	virtual FString GetStaticDescription() const override;
+
+	virtual void InitializeFromAsset(UBehaviorTree& Asset) override;
 
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 #pragma endregion Overrides
