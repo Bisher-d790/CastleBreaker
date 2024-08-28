@@ -32,13 +32,20 @@ protected:
 
 #pragma region Enemy
 public:
-	void EnemyDetected(APawn* Enemy);
+	UFUNCTION()
+	virtual void EnemyDetected(APawn* Enemy);
+
+	UFUNCTION()
+	virtual void EnemyUnDetected();
 
 	UFUNCTION(BlueprintPure, Category = "AI|Enemy")
 	FORCEINLINE APawn* GetTargetEnemy() const { return TargetEnemy; }
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEnemyDetected, APawn*, DetectedEnemy);
 	FOnEnemyDetected OnEnemyDetected;
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnEnemyUnDetected);
+	FOnEnemyUnDetected OnEnemyUnDetected;
 
 protected:
 	void SetTargetEnemy(APawn* Enemy);

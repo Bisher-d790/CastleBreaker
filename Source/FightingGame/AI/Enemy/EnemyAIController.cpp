@@ -5,6 +5,7 @@
 
 // Project
 #include "FightingGame/AI/Enemy/EnemyCharacter.h"
+#include "FightingGame/Components/HealthComponent.h"
 #include "FightingGame/Data/EnemySettings.h"
 #include "FightingGame/Items/Weapons/WeaponItem.h"
 
@@ -44,6 +45,10 @@ void AEnemyAIController::EnemyDetected(APawn* Enemy)
 	const auto EnemyCharacter = Cast<AFGCharacter>(Enemy);
 	if (!IsValid(EnemyCharacter)) return;
 
+	// When enemy dies, undetect
+	const auto EnemyHealthComponent = EnemyCharacter->GetHealthComponent();
+	if (!IsValid(EnemyHealthComponent) || EnemyHealthComponent->IsDead()) return;
+
 	SetTargetEnemy(EnemyCharacter);
 
 	if (IsValid(Blackboard))
@@ -51,7 +56,31 @@ void AEnemyAIController::EnemyDetected(APawn* Enemy)
 		Blackboard->SetValueAsObject(TargetEnemyBlackboard, Enemy);
 	}
 
+	if (!EnemyHealthComponent->OnDeath.IsAlreadyBound(this, &AEnemyAIController::EnemyUnDetected))
+		EnemyHealthComponent->OnDeath.AddDynamic(this, &AEnemyAIController::EnemyUnDetected);
+
 	OnEnemyDetected.Broadcast(Enemy);
+}
+
+void AEnemyAIController::EnemyUnDetected()
+{
+	if (IsValid(TargetEnemy) && Cast<AFGCharacter>(TargetEnemy))
+	{
+		if (const auto EnemyHealthComponent = Cast<AFGCharacter>(TargetEnemy)->GetHealthComponent())
+		{
+			if (EnemyHealthComponent->OnDeath.IsAlreadyBound(this, &AEnemyAIController::EnemyUnDetected))
+				EnemyHealthComponent->OnDeath.RemoveDynamic(this, &AEnemyAIController::EnemyUnDetected);
+		}
+	}
+
+	SetTargetEnemy(nullptr);
+
+	if (IsValid(Blackboard))
+	{
+		Blackboard->SetValueAsObject(TargetEnemyBlackboard, nullptr);
+	}
+
+	OnEnemyUnDetected.Broadcast();
 }
 
 void AEnemyAIController::SetTargetEnemy(APawn* Enemy)
