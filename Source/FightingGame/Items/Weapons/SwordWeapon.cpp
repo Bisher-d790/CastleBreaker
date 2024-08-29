@@ -45,13 +45,16 @@ void ASwordWeapon::FinishAttack()
 
 void ASwordWeapon::HandleBladeBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (!IsValid(OtherActor) || OtherActor == GetOwner() || AttackedActors.Contains(OtherActor)) return;
+	if (!IsValid(OtherActor)
+		|| OtherActor == GetOwner()
+		|| AttackedActors.Contains(OtherActor)) return;
 
-	if (bOnlyDamagePlayers && !OtherActor->GetInstigatorController<APlayerController>())
-		return;
+
 
 	if (const auto DamageableActor = Cast<IDamageableInterface>(OtherActor))
 	{
+		if (!CanDamageActor(OtherActor)) return;
+
 		DamageableActor->TakeDamage(AttackDamage);
 
 		AttackedActors.Add(OtherActor);

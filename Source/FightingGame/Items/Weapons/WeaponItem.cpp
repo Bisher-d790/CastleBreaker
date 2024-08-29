@@ -4,6 +4,9 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
+// Project
+#include "FightingGame/AI/Enemy/EnemyAIController.h"
+
 
 void AWeaponItem::StartPrimaryAction()
 {
@@ -61,4 +64,19 @@ bool AWeaponItem::CanAttack() const
 
 	// Don't attack if is already attacking
 	return !bIsAttacking;
+}
+
+bool AWeaponItem::CanDamageActor(const AActor* DamagedActor) const
+{
+	if (!IsValid(GetOwner())) return false;
+
+	// If Owner is of Enemy type
+	if (const auto OwnerController = GetOwner()->GetInstigatorController<AEnemyAIController>())
+	{
+		// Check if can only damage players, and if the victim is a player
+		if(OwnerController->CanOnlyDamagePlayers())
+			return IsValid(DamagedActor->GetInstigatorController<APlayerController>());
+	}
+
+	return true;
 }

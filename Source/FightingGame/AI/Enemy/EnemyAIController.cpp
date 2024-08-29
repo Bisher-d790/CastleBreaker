@@ -32,6 +32,8 @@ void AEnemyAIController::SetupSettingsFromDT()
 	const auto EnemySettings = SettingsTable->FindRow<FEnemySettings>(FName(SettingsRow), SettingsRow);
 	if (!EnemySettings) return;
 
+	bOnlyDamagePlayers = EnemySettings->bOnlyCanDamagePlayers;
+
 	Blackboard->SetValueAsFloat(MinPatrolRadiusBlackboard, EnemySettings->MinPatrolRadius);
 	Blackboard->SetValueAsFloat(MaxPatrolRadiusBlackboard, EnemySettings->MaxPatrolRadius);
 	Blackboard->SetValueAsFloat(MinCombatRangeBlackboard, EnemySettings->MinCombatRange);

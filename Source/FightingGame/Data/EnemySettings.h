@@ -20,6 +20,9 @@ public:
 	float MaxPatrolRadius = 1500.f;
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
+	bool bOnlyCanDamagePlayers = true;
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
 	float MinCombatRange = 100.f;
 
 	UPROPERTY(EditAnywhere, Category = "Combat")

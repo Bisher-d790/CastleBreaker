@@ -28,6 +28,8 @@ protected:
 
 	virtual bool CanAttack() const;
 
+	virtual bool CanDamageActor(const AActor* DamagedActor) const;
+
 	UPROPERTY() bool bIsAttacking = false;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Attack")

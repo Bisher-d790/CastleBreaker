@@ -70,6 +70,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = "AI|Combat")
 	bool IsAttacking() const;
 
+	UFUNCTION(BlueprintPure, Category = "AI|Combat")
+	FORCEINLINE bool CanOnlyDamagePlayers() const { return bOnlyDamagePlayers; };
+
 protected:
 	void FinishAttack();
 
@@ -77,5 +80,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "AI|Combat")
 	FName CurrentAttackersBlackboard = "CurrentAttackers";
+
+	UPROPERTY() bool bOnlyDamagePlayers = false;
 #pragma endregion Combat
 };
