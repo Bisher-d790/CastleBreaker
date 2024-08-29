@@ -33,6 +33,14 @@ protected:
 	FBlackboardKeySelector TargetLocationKey;
 
 	UPROPERTY(EditAnywhere, Category = Blackboard)
-	FBlackboardKeySelector RadiusKey;
+	FBlackboardKeySelector MinRadiusKey;
+
+	UPROPERTY(EditAnywhere, Category = Blackboard)
+	FBlackboardKeySelector MaxRadiusKey;
 #pragma endregion Overrides
+
+#pragma region Navigation
+protected:
+	bool GetRandomLocationInRange(const FVector& CenterLocation, const float MinRadius, const float MaxRadius, FNavLocation& OutLocation);
+#pragma endregion Navigation
 };

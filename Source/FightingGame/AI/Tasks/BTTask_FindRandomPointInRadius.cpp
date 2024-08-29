@@ -16,16 +16,18 @@ UBTTask_FindRandomPointInRadius::UBTTask_FindRandomPointInRadius(FObjectInitiali
 	OriginLocationKey.AddObjectFilter(this, GET_MEMBER_NAME_CHECKED(UBTTask_FindRandomPointInRadius, OriginLocationKey), AActor::StaticClass());
 	OriginLocationKey.AddVectorFilter(this, GET_MEMBER_NAME_CHECKED(UBTTask_FindRandomPointInRadius, OriginLocationKey));
 	TargetLocationKey.AddVectorFilter(this, GET_MEMBER_NAME_CHECKED(UBTTask_FindRandomPointInRadius, TargetLocationKey));
-	RadiusKey.AddFloatFilter(this, GET_MEMBER_NAME_CHECKED(UBTTask_FindRandomPointInRadius, RadiusKey));
+	MinRadiusKey.AddFloatFilter(this, GET_MEMBER_NAME_CHECKED(UBTTask_FindRandomPointInRadius, MinRadiusKey));
+	MaxRadiusKey.AddFloatFilter(this, GET_MEMBER_NAME_CHECKED(UBTTask_FindRandomPointInRadius, MaxRadiusKey));
 }
 
 FString UBTTask_FindRandomPointInRadius::GetStaticDescription() const
 {
 	return Super::GetStaticDescription() +
-		FString::Printf(TEXT("\nOrigin Location: %s\nTarget Location: %s\nRadius: %s"),
+		FString::Printf(TEXT("\nOrigin Location: %s\nTarget Location: %s\nMin Radius: %s\nMax Radius: %s"),
 			*OriginLocationKey.SelectedKeyName.ToString(),
 			*TargetLocationKey.SelectedKeyName.ToString(),
-			*RadiusKey.SelectedKeyName.ToString());
+			*MinRadiusKey.SelectedKeyName.ToString(),
+			*MaxRadiusKey.SelectedKeyName.ToString());
 }
 
 void UBTTask_FindRandomPointInRadius::InitializeFromAsset(UBehaviorTree& Asset)
@@ -36,7 +38,8 @@ void UBTTask_FindRandomPointInRadius::InitializeFromAsset(UBehaviorTree& Asset)
 	{
 		OriginLocationKey.ResolveSelectedKey(*BlackboardData);
 		TargetLocationKey.ResolveSelectedKey(*BlackboardData);
-		RadiusKey.ResolveSelectedKey(*BlackboardData);
+		MinRadiusKey.ResolveSelectedKey(*BlackboardData);
+		MaxRadiusKey.ResolveSelectedKey(*BlackboardData);
 	}
 	else
 	{
@@ -46,16 +49,8 @@ void UBTTask_FindRandomPointInRadius::InitializeFromAsset(UBehaviorTree& Asset)
 
 EBTNodeResult::Type UBTTask_FindRandomPointInRadius::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	const auto World = GetWorld();
-	if (!IsValid(World))
-	{
-		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
-		return EBTNodeResult::Failed;
-	}
-
 	const auto BlackboardComponent = OwnerComp.GetBlackboardComponent();
-	const auto NavigationSystem = UNavigationSystemV1::GetCurrent(World);
-	if (!IsValid(BlackboardComponent) || !IsValid(NavigationSystem))
+	if (!IsValid(BlackboardComponent))
 	{
 		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 		return EBTNodeResult::Failed;
@@ -80,11 +75,12 @@ EBTNodeResult::Type UBTTask_FindRandomPointInRadius::ExecuteTask(UBehaviorTreeCo
 		OriginLocation = BlackboardComponent->GetValueAsVector(OriginLocationKey.SelectedKeyName);
 	}
 
-	const auto Radius = BlackboardComponent->GetValueAsFloat(RadiusKey.SelectedKeyName);
+	const auto MinRadius = BlackboardComponent->GetValueAsFloat(MinRadiusKey.SelectedKeyName);
+	const auto MaxRadius = BlackboardComponent->GetValueAsFloat(MaxRadiusKey.SelectedKeyName);
 
 	// Get random location
 	FNavLocation RandomLocation;
-	if (!NavigationSystem->GetRandomPointInNavigableRadius(OriginLocation, Radius, RandomLocation))
+	if (!GetRandomLocationInRange(OriginLocation, MinRadius, MaxRadius, RandomLocation))
 	{
 		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 		return EBTNodeResult::Failed;
@@ -95,5 +91,22 @@ EBTNodeResult::Type UBTTask_FindRandomPointInRadius::ExecuteTask(UBehaviorTreeCo
 
 	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;
+}
+
+bool UBTTask_FindRandomPointInRadius::GetRandomLocationInRange(const FVector& CenterLocation, const float MinRadius, const float MaxRadius, FNavLocation& OutLocation)
+{
+	const auto NavigationSystem = GetWorld() ? UNavigationSystemV1::GetNavigationSystem(GetWorld()) : nullptr;
+	if (!NavigationSystem) return false;
+
+	// Get a random Radius within range
+	const float Radius = FMath::RandRange(MinRadius, MaxRadius);
+
+	// Get a random point within radius
+	const FVector& RandomPoint = NavigationSystem->GetRandomPointInNavigableRadius(GetWorld(), CenterLocation, Radius);
+
+	// Make sure the point is exactly at the Radius
+	const FVector& TargetLocation = CenterLocation + ((RandomPoint - CenterLocation).GetSafeNormal() * Radius);
+
+	return NavigationSystem->ProjectPointToNavigation(TargetLocation, OutLocation);
 }
 

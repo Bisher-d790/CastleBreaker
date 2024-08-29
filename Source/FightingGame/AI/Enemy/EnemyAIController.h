@@ -23,7 +23,9 @@ protected:
 	virtual void SetupSettingsFromDT() override;
 
 	UPROPERTY(EditDefaultsOnly, Category = "AI|Settings|Blackboard")
-	FName PatrolRadiusBlackboard = "PatrolRadius";
+	FName MinPatrolRadiusBlackboard = "MinPatrolRadius";
+	UPROPERTY(EditDefaultsOnly, Category = "AI|Settings|Blackboard")
+	FName MaxPatrolRadiusBlackboard = "MaxPatrolRadius";
 	UPROPERTY(EditDefaultsOnly, Category = "AI|Settings|Blackboard")
 	FName MinCombatRangeBlackboard = "MinCombatRange";
 	UPROPERTY(EditDefaultsOnly, Category = "AI|Settings|Blackboard")

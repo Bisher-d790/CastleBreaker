@@ -32,7 +32,8 @@ void AEnemyAIController::SetupSettingsFromDT()
 	const auto EnemySettings = SettingsTable->FindRow<FEnemySettings>(FName(SettingsRow), SettingsRow);
 	if (!EnemySettings) return;
 
-	Blackboard->SetValueAsFloat(PatrolRadiusBlackboard, EnemySettings->PatrolRadius);
+	Blackboard->SetValueAsFloat(MinPatrolRadiusBlackboard, EnemySettings->MinPatrolRadius);
+	Blackboard->SetValueAsFloat(MaxPatrolRadiusBlackboard, EnemySettings->MaxPatrolRadius);
 	Blackboard->SetValueAsFloat(MinCombatRangeBlackboard, EnemySettings->MinCombatRange);
 	Blackboard->SetValueAsFloat(MaxCombatRangeBlackboard, EnemySettings->MaxCombatRange);
 	Blackboard->SetValueAsFloat(AttackDistanceBlackboard, EnemySettings->AttackDistance);

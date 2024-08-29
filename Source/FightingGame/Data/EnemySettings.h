@@ -14,7 +14,10 @@ struct FEnemySettings : public FTableRowBase
 
 public:
 	UPROPERTY(EditAnywhere, Category = "Patrol")
-	float PatrolRadius = 1500.f;
+	float MinPatrolRadius = 300.f;
+
+	UPROPERTY(EditAnywhere, Category = "Patrol")
+	float MaxPatrolRadius = 1500.f;
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	float MinCombatRange = 100.f;
