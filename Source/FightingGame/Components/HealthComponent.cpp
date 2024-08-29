@@ -9,7 +9,7 @@ void UHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SetHealth(InitialHealth);
+	ChangeHealth(InitialHealth);
 }
 
 void UHealthComponent::ChangeHealth(const float ChangeAmount)
