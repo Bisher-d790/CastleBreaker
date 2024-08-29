@@ -19,6 +19,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Patrol")
 	float MaxPatrolRadius = 1500.f;
 
+	UPROPERTY(EditAnywhere, Category = "Health")
+	float LowHealthThreshold = 30.f;
+
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	bool bOnlyCanDamagePlayers = true;
 

@@ -33,6 +33,7 @@ void AEnemyAIController::SetupSettingsFromDT()
 	if (!EnemySettings) return;
 
 	bOnlyDamagePlayers = EnemySettings->bOnlyCanDamagePlayers;
+	LowHealthThreshold = EnemySettings->LowHealthThreshold;
 
 	Blackboard->SetValueAsFloat(MinPatrolRadiusBlackboard, EnemySettings->MinPatrolRadius);
 	Blackboard->SetValueAsFloat(MaxPatrolRadiusBlackboard, EnemySettings->MaxPatrolRadius);
@@ -92,6 +93,14 @@ void AEnemyAIController::SetTargetEnemy(APawn* Enemy)
 {
 	TargetEnemy = Enemy;
 	SetFocus(TargetEnemy, EAIFocusPriority::Gameplay);
+}
+
+bool AEnemyAIController::IsLowHealth() const
+{
+	if (const auto OwnedCharacter = GetPawn<AFGCharacter>())
+		return OwnedCharacter->GetHealth() <= LowHealthThreshold;
+
+	return false;
 }
 
 void AEnemyAIController::StartAttack()

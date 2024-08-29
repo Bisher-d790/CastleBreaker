@@ -62,6 +62,18 @@ protected:
 	FName TargetEnemyBlackboard = "TargetEnemy";
 #pragma endregion Enemy
 
+#pragma region Health
+public:
+	UFUNCTION(BlueprintPure, Category = "AI|Health")
+	FORCEINLINE float GetLowHealthThreshold() const { return LowHealthThreshold; }
+
+	UFUNCTION(BlueprintPure, Category = "AI|Health")
+	bool IsLowHealth() const;
+
+protected:
+	UPROPERTY() float LowHealthThreshold = 0.f;
+#pragma endregion Health
+
 #pragma region Combat
 public:
 	UFUNCTION(BlueprintCallable, Category = "AI|Combat")
