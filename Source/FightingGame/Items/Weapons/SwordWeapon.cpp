@@ -47,6 +47,9 @@ void ASwordWeapon::HandleBladeBeginOverlap(UPrimitiveComponent* OverlappedCompon
 {
 	if (!IsValid(OtherActor) || OtherActor == GetOwner() || AttackedActors.Contains(OtherActor)) return;
 
+	if (bOnlyDamagePlayers && !OtherActor->GetInstigatorController<APlayerController>())
+		return;
+
 	if (const auto DamageableActor = Cast<IDamageableInterface>(OtherActor))
 	{
 		DamageableActor->TakeDamage(AttackDamage);

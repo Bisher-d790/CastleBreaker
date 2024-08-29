@@ -34,4 +34,10 @@ protected:
 
 	UPROPERTY() TArray<AActor*> AttackedActors = {};
 #pragma endregion Attack
+
+#pragma region Settings
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Settings")
+	bool bOnlyDamagePlayers = true;
+#pragma endregion Settings
 };
