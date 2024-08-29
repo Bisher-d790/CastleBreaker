@@ -24,4 +24,7 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	float AttackDistance = 100.f;
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	int MaxConcurrentAttackers = 1;
 };

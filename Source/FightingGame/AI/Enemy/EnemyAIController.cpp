@@ -36,6 +36,7 @@ void AEnemyAIController::SetupSettingsFromDT()
 	Blackboard->SetValueAsFloat(MinCombatRangeBlackboard, EnemySettings->MinCombatRange);
 	Blackboard->SetValueAsFloat(MaxCombatRangeBlackboard, EnemySettings->MaxCombatRange);
 	Blackboard->SetValueAsFloat(AttackDistanceBlackboard, EnemySettings->AttackDistance);
+	Blackboard->SetValueAsInt(MaxAttackersBlackboard, EnemySettings->MaxConcurrentAttackers);
 }
 
 void AEnemyAIController::EnemyDetected(APawn* Enemy)
@@ -92,6 +93,8 @@ void AEnemyAIController::SetTargetEnemy(APawn* Enemy)
 
 void AEnemyAIController::StartAttack()
 {
+	if (!IsValid(Blackboard)) return;
+
 	SetFocus(TargetEnemy, EAIFocusPriority::Gameplay);
 
 	if (const auto OwnerCharacter = GetPawn<AEnemyCharacter>())
@@ -101,6 +104,13 @@ void AEnemyAIController::StartAttack()
 
 		if (IsValid(AttackingWeapon))
 		{
+			const int32 CurrentAttackers = Blackboard->GetValueAsInt(CurrentAttackersBlackboard);
+			const int32 MaxConcurrentAttackers = Blackboard->GetValueAsInt(MaxAttackersBlackboard);
+			// Check if can attack
+			if (CurrentAttackers >= MaxConcurrentAttackers) return;
+			// Incremeant current attackers
+			Blackboard->SetValueAsInt(CurrentAttackersBlackboard, CurrentAttackers + 1);
+
 			// Start attack
 			OwnerCharacter->StartPrimaryAction();
 
@@ -113,6 +123,13 @@ void AEnemyAIController::StartAttack()
 void AEnemyAIController::FinishAttack()
 {
 	AttackingWeapon = nullptr;
+
+	// Decremeant current attackers
+	if (IsValid(Blackboard))
+	{
+		const int32 CurrentAttackers = Blackboard->GetValueAsInt(CurrentAttackersBlackboard);
+		Blackboard->SetValueAsInt(CurrentAttackersBlackboard, (CurrentAttackers <= 0) ? 0 : CurrentAttackers - 1);
+	}
 }
 
 bool AEnemyAIController::IsAttacking() const

@@ -30,6 +30,8 @@ protected:
 	FName MaxCombatRangeBlackboard = "MaxCombatRange";
 	UPROPERTY(EditDefaultsOnly, Category = "AI|Settings|Blackboard")
 	FName AttackDistanceBlackboard = "AttackDistance";
+	UPROPERTY(EditDefaultsOnly, Category = "AI|Settings|Blackboard")
+	FName MaxAttackersBlackboard = "MaxConcurrentAttackers";
 #pragma endregion Settings
 
 #pragma region Enemy
@@ -60,15 +62,18 @@ protected:
 
 #pragma region Combat
 public:
-	UFUNCTION(BlueprintCallable, Category = "Combat")
+	UFUNCTION(BlueprintCallable, Category = "AI|Combat")
 	void StartAttack();
 
-	UFUNCTION(BlueprintPure, Category = "Combat")
+	UFUNCTION(BlueprintPure, Category = "AI|Combat")
 	bool IsAttacking() const;
 
 protected:
 	void FinishAttack();
 
 	UPROPERTY() AWeaponItem* AttackingWeapon = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, Category = "AI|Combat")
+	FName CurrentAttackersBlackboard = "CurrentAttackers";
 #pragma endregion Combat
 };
