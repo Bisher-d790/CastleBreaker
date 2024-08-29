@@ -69,7 +69,7 @@ bool UBTDecorator_IsInRangeToTarget::CalculateRawConditionValue(UBehaviorTreeCom
 		OriginLocation = BlackboardComponent->GetValueAsVector(OriginLocationKey.SelectedKeyName);
 	}
 
-	// Get Destination Location
+	// Get Target Location
 	FVector TargetLocation = FVector::ZeroVector;
 	// If key is an object
 	if (const auto TargetObject = BlackboardComponent->GetValueAsObject(TargetLocationKey.SelectedKeyName))
@@ -88,9 +88,9 @@ bool UBTDecorator_IsInRangeToTarget::CalculateRawConditionValue(UBehaviorTreeCom
 	const float MinRange = BlackboardComponent->GetValueAsFloat(MinRangeRadiusKey.SelectedKeyName);
 	const float MaxRange = BlackboardComponent->GetValueAsFloat(MaxRangeRadiusKey.SelectedKeyName);
 
-	// check if is in combat range
+	// Check the Origin Location within range
 	const float DistanceToTarget = FVector::Distance(OriginLocation, TargetLocation);
 
-	// Set bool value to blackboard key
+	// Return the result
 	return (DistanceToTarget >= MinRange && DistanceToTarget <= MaxRange);
 }

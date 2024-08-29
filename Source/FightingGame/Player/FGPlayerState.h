@@ -6,6 +6,9 @@
 
 #include "FGPlayerState.generated.h"
 
+/// <summary>
+/// Keeps the Kill Count and other scores
+/// </summary>
 UCLASS()
 class FIGHTINGGAME_API AFGPlayerState : public APlayerState
 {

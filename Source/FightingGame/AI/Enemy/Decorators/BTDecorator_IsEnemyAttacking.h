@@ -6,6 +6,9 @@
 
 #include "BTDecorator_IsEnemyAttacking.generated.h"
 
+/// <summary>
+/// Decorator specific to an AEnemyAIController, to check whether it's attacking
+/// </summary>
 UCLASS()
 class FIGHTINGGAME_API UBTDecorator_IsEnemyAttacking : public UBTDecorator
 {

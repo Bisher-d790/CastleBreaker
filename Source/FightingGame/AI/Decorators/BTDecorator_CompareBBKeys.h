@@ -6,6 +6,9 @@
 
 #include "BTDecorator_CompareBBKeys.generated.h"
 
+/*
+* The types of comparison possible
+*/
 UENUM(BlueprintType, Blueprintable)
 enum class EBBComparisonType : uint8
 {
@@ -17,6 +20,9 @@ enum class EBBComparisonType : uint8
 	SmallerOrEquals
 };
 
+/// <summary>
+/// Decorator to compare between to Blackboard Key values
+/// </summary>
 UCLASS()
 class FIGHTINGGAME_API UBTDecorator_CompareBBKeys : public UBTDecorator
 {
@@ -36,9 +42,11 @@ protected:
 
 #pragma region Blackboard
 protected:
+	// First hand of the comparison, should be the same type as the SecondKey
 	UPROPERTY(EditAnywhere, Category = Blackboard)
 	FBlackboardKeySelector FirstBlackboardKey;
 
+	// Second hand of the comparison, should be the same type as the FirstKey
 	UPROPERTY(EditAnywhere, Category = Blackboard)
 	FBlackboardKeySelector SecondBlackboardKey;
 #pragma endregion Blackboard

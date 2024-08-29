@@ -8,6 +8,9 @@
 
 class AWeaponItem;
 
+/// <summary>
+/// The main controller for the Enemy type, it acts as an Enemy AI to the player and attacks him
+/// </summary>
 UCLASS()
 class FIGHTINGGAME_API AEnemyAIController : public AFGAIController
 {
@@ -20,8 +23,10 @@ protected:
 
 #pragma region Settings
 protected:
+	// Setup the values from a Settings DT
 	virtual void SetupSettingsFromDT() override;
 
+	// Blackboard Keys Names to be set from the Settings
 	UPROPERTY(EditDefaultsOnly, Category = "AI|Settings|Blackboard")
 	FName MinPatrolRadiusBlackboard = "MinPatrolRadius";
 	UPROPERTY(EditDefaultsOnly, Category = "AI|Settings|Blackboard")
@@ -71,6 +76,7 @@ public:
 	bool IsLowHealth() const;
 
 protected:
+	// Set from the Settings DT
 	UPROPERTY() float LowHealthThreshold = 0.f;
 #pragma endregion Health
 
@@ -90,9 +96,11 @@ protected:
 
 	UPROPERTY() AWeaponItem* AttackingWeapon = nullptr;
 
+	// Blackboard Key to be set when attacking, keeps track of the number of enemies currently attacking
 	UPROPERTY(EditDefaultsOnly, Category = "AI|Combat")
 	FName CurrentAttackersBlackboard = "CurrentAttackers";
 
+	// Set from the Settings DT
 	UPROPERTY() bool bOnlyDamagePlayers = false;
 #pragma endregion Combat
 };

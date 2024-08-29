@@ -6,6 +6,9 @@
 
 #include "BTTask_EnemyStartAttack.generated.h"
 
+/// <summary>
+/// Task specific to an AEnemyAIController, to Start Attacking
+/// </summary>
 UCLASS()
 class FIGHTINGGAME_API UBTTask_EnemyStartAttack : public UBTTaskNode
 {

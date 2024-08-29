@@ -6,6 +6,9 @@
 
 #include "BTDecorator_IsLowOnHealth.generated.h"
 
+/// <summary>
+/// Decorator specific to an AEnemyAIController, to check whether it's low on health
+/// </summary>
 UCLASS()
 class FIGHTINGGAME_API UBTDecorator_IsLowOnHealth : public UBTDecorator
 {

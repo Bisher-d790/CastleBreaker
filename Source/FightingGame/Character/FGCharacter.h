@@ -14,6 +14,9 @@ class UCameraComponent;
 class UHealthComponent;
 class AEquippableItem;
 
+/// <summary>
+/// Basic class for any type of Character, Damageable, Equips items, and handles basic controls
+/// </summary>
 UCLASS(config = Game)
 class AFGCharacter : public ACharacter, public IDamageableInterface
 {
@@ -107,7 +110,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Health")
 	virtual float GetHealth() const override;
 
-	// Update the health bar that is visible only for other players
+	// Update the health bar that is visible only for other players, or can be used for other VFX
 	UFUNCTION(BlueprintImplementableEvent, Category = "Health|HealthBar")
 	void UpdateHealthBar();
 

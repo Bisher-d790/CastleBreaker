@@ -6,6 +6,9 @@
 
 #include "BTDecorator_IsInRangeToTarget.generated.h"
 
+/// <summary>
+/// Decorator to check if a Location is in a specific Range relative to a TargetLocation
+/// </summary>
 UCLASS()
 class FIGHTINGGAME_API UBTDecorator_IsInRangeToTarget : public UBTDecorator
 {

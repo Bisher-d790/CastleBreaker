@@ -46,6 +46,7 @@ void UBTService_RestartOnValueChange::TickNode(UBehaviorTreeComponent& OwnerComp
 
 	if (const auto BlackboardComponent = OwnerComp.GetBlackboardComponent())
 	{
+		// Get the current value
 		const bool bValue = (ValueToCheckKey.SelectedKeyType == UBlackboardKeyType_Bool::StaticClass()) ?
 			BlackboardComponent->GetValueAsBool(ValueToCheckKey.SelectedKeyName) :
 			IsValid(BlackboardComponent->GetValueAsObject(ValueToCheckKey.SelectedKeyName));
@@ -54,6 +55,7 @@ void UBTService_RestartOnValueChange::TickNode(UBehaviorTreeComponent& OwnerComp
 		if (bValue != bOriginalValue)
 		{
 			OwnerComp.RestartTree();
+			// Set the new value
 			bOriginalValue = bValue;
 		}
 	}

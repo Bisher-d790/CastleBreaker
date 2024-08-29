@@ -6,7 +6,9 @@
 
 #include "BTTask_FindRandomPointInRadius.generated.h"
 
-
+/// <summary>
+/// A simple Task to get a Random Point with in a Min and Max Range Radius, relative to an OriginLocation
+/// </summary>
 UCLASS()
 class FIGHTINGGAME_API UBTTask_FindRandomPointInRadius : public UBTTaskNode
 {
@@ -26,15 +28,19 @@ protected:
 
 #pragma region Blackboard
 protected:
+	// Center point to get the Random location around
 	UPROPERTY(EditAnywhere, Category = Blackboard)
 	FBlackboardKeySelector OriginLocationKey;
 
+	// Target Location where to store the value
 	UPROPERTY(EditAnywhere, Category = Blackboard)
 	FBlackboardKeySelector TargetLocationKey;
 
+	// Min Radius range, min distance to Origin
 	UPROPERTY(EditAnywhere, Category = Blackboard)
 	FBlackboardKeySelector MinRadiusKey;
 
+	// Max Radius range, max distance to Origin
 	UPROPERTY(EditAnywhere, Category = Blackboard)
 	FBlackboardKeySelector MaxRadiusKey;
 #pragma endregion Overrides

@@ -8,6 +8,10 @@
 
 class UHealthComponent;
 
+/// <summary>
+/// The interface by which we interact with the Health Component and damage actors
+/// Implementors must have a Health Component
+/// </summary>
 UINTERFACE(MinimalAPI, Blueprintable)
 class UDamageableInterface : public UInterface
 {

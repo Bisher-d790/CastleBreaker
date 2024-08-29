@@ -58,8 +58,10 @@ bool UBTDecorator_CompareBBKeys::CalculateRawConditionValue(UBehaviorTreeCompone
 	const auto BlackboardComponent = OwnerComp.GetBlackboardComponent();
 	if (!IsValid(BlackboardComponent)) return false;
 
+	// Make sure the two keys are of the same type
 	if (FirstBlackboardKey.SelectedKeyType != SecondBlackboardKey.SelectedKeyType) return false;
 
+	// Get the 2 values
 	float Value1 = 0.f, Value2 = 0.f;
 
 	if (FirstBlackboardKey.SelectedKeyType == UBlackboardKeyType_Float::StaticClass())
@@ -83,6 +85,7 @@ bool UBTDecorator_CompareBBKeys::CalculateRawConditionValue(UBehaviorTreeCompone
 		Value2 = BlackboardComponent->GetValueAsRotator(SecondBlackboardKey.SelectedKeyName).Vector().Size();
 	}
 
+	// Return the comparison
 	switch (ComparisonType)
 	{
 	case EBBComparisonType::Equals:

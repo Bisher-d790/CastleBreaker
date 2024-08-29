@@ -8,6 +8,9 @@
 
 class UDataTable;
 
+/// <summary>
+/// Parent AI Contorller class to any AI Agent type, handles settings the settings, running the BT, and basic functionalities
+/// </summary>
 UCLASS()
 class FIGHTINGGAME_API AFGAIController : public AAIController
 {
@@ -24,6 +27,7 @@ protected:
 
 #pragma region AI
 protected:
+	// The main behavior to run
 	UPROPERTY(EditAnywhere, Category = "AI|BehaviorTree")
 	UBehaviorTree* BehaviorTree = nullptr;
 #pragma endregion AI
@@ -43,6 +47,7 @@ protected:
 protected:
 	UFUNCTION() void HandleDeath();
 
+	// Time to destroy actor after death, could be used for pooling later.
 	UPROPERTY(EditDefaultsOnly, Category = "Death")
 	float DestroyTimeAfterDeath = 2.f;
 #pragma region Death

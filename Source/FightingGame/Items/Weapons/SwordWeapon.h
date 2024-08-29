@@ -8,6 +8,7 @@
 
 class UCapsuleComponent;
 
+// A class of a weapon that can damage actors with a black collision, that is activated and deactivated on attack
 UCLASS()
 class FIGHTINGGAME_API ASwordWeapon : public AWeaponItem
 {

@@ -9,6 +9,9 @@
 class UPawnSensingComponent;
 class UNavigationInvokerComponent;
 
+/// <summary>
+/// Parent Character class to any AI type, have basic functionality that any AI Agent Character needs
+/// </summary>
 UCLASS()
 class FIGHTINGGAME_API AFGAICharacter : public AFGCharacter
 {

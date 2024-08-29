@@ -6,6 +6,9 @@
 
 #include "BTService_RestartOnValueChange.generated.h"
 
+/// <summary>
+/// A Service that restarts the BehaviorTree if a specified Key Result Value has changed
+/// </summary>
 UCLASS()
 class FIGHTINGGAME_API UBTService_RestartOnValueChange : public UBTService
 {

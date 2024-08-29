@@ -6,6 +6,9 @@
 
 #include "BTTask_MoveToBlackboard.generated.h"
 
+/// <summary>
+/// An extending Task over the normal MoveTo task, where the Acceptable Radius could be set through a Blackboard Key
+/// </summary>
 UCLASS()
 class FIGHTINGGAME_API UBTTask_MoveToBlackboard : public UBTTask_MoveTo
 {
@@ -25,6 +28,7 @@ protected:
 
 #pragma region Blackboard
 protected:
+	// Overrides the Acceptable Radius value
 	UPROPERTY(EditAnywhere, Category = Blackboard)
 	FBlackboardKeySelector AcceptableRadiusKey;
 #pragma endregion Blackboard

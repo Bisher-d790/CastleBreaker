@@ -9,6 +9,9 @@
 class AFGAICharacter;
 class UArrowComponent;
 
+/// <summary>
+/// Factory class to spawn AI Agents in the Map
+/// </summary>
 UCLASS()
 class FIGHTINGGAME_API AAIAgentSpawner : public AActor
 {

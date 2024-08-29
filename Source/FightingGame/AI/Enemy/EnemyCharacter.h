@@ -6,6 +6,9 @@
 
 #include "EnemyCharacter.generated.h"
 
+/// <summary>
+/// Main class for the Enemy type character, can detect the player
+/// </summary>
 UCLASS()
 class FIGHTINGGAME_API AEnemyCharacter : public AFGAICharacter
 {

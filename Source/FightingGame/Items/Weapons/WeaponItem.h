@@ -6,6 +6,10 @@
 
 #include "WeaponItem.generated.h"
 
+/// <summary>
+/// Parent class for any type of weapon, should have a specific type inherited from this class,
+/// Handles the basic implementations of the weapons
+/// </summary>
 UCLASS()
 class FIGHTINGGAME_API AWeaponItem : public AEquippableItem
 {

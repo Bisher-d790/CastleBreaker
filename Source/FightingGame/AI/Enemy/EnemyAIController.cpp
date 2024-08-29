@@ -14,6 +14,7 @@ void AEnemyAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// If there's a weapon currently in use for attack, check if it has finished
 	if (IsValid(AttackingWeapon))
 	{
 		if (!AttackingWeapon->IsAttacking())
@@ -32,6 +33,7 @@ void AEnemyAIController::SetupSettingsFromDT()
 	const auto EnemySettings = SettingsTable->FindRow<FEnemySettings>(FName(SettingsRow), SettingsRow);
 	if (!EnemySettings) return;
 
+	// Setup settings from Data Table
 	bOnlyDamagePlayers = EnemySettings->bOnlyCanDamagePlayers;
 	LowHealthThreshold = EnemySettings->LowHealthThreshold;
 
@@ -51,17 +53,13 @@ void AEnemyAIController::EnemyDetected(APawn* Enemy)
 	const auto EnemyCharacter = Cast<AFGCharacter>(Enemy);
 	if (!IsValid(EnemyCharacter)) return;
 
-	// When enemy dies, undetect
 	const auto EnemyHealthComponent = EnemyCharacter->GetHealthComponent();
+	// Don't detect dead enemies
 	if (!IsValid(EnemyHealthComponent) || EnemyHealthComponent->IsDead()) return;
 
 	SetTargetEnemy(EnemyCharacter);
 
-	if (IsValid(Blackboard))
-	{
-		Blackboard->SetValueAsObject(TargetEnemyBlackboard, Enemy);
-	}
-
+	// Undetect enemy after it has been killed
 	if (!EnemyHealthComponent->OnDeath.IsAlreadyBound(this, &AEnemyAIController::EnemyUnDetected))
 		EnemyHealthComponent->OnDeath.AddDynamic(this, &AEnemyAIController::EnemyUnDetected);
 
@@ -79,12 +77,8 @@ void AEnemyAIController::EnemyUnDetected()
 		}
 	}
 
+	// Remove the current target reference
 	SetTargetEnemy(nullptr);
-
-	if (IsValid(Blackboard))
-	{
-		Blackboard->SetValueAsObject(TargetEnemyBlackboard, nullptr);
-	}
 
 	OnEnemyUnDetected.Broadcast();
 }
@@ -93,6 +87,13 @@ void AEnemyAIController::SetTargetEnemy(APawn* Enemy)
 {
 	TargetEnemy = Enemy;
 	SetFocus(TargetEnemy, EAIFocusPriority::Gameplay);
+
+	// Set the new target in the Blackboard
+	if (IsValid(Blackboard))
+	{
+		Blackboard->SetValueAsObject(TargetEnemyBlackboard, Enemy);
+	}
+
 }
 
 bool AEnemyAIController::IsLowHealth() const

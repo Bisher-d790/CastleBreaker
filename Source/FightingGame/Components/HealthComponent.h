@@ -6,7 +6,9 @@
 
 #include "HealthComponent.generated.h"
 
-
+/// <summary>
+/// Basic Health Component, can be healed and damaged, Actors that use it must implement UDamageableInterface
+/// </summary>
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class FIGHTINGGAME_API UHealthComponent : public UActorComponent
 {

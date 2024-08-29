@@ -10,6 +10,9 @@ class AEquippableItem;
 class UUserWidget;
 class UWaveStartedWidget;
 
+/// <summary>
+/// The main Player Contorller, it handles UI, Controls
+/// </summary>
 UCLASS()
 class FIGHTINGGAME_API AFGPlayerController : public APlayerController
 {

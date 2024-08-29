@@ -13,6 +13,9 @@ class UDataTable;
 class AAIAgentSpawner;
 class AFGAICharacter;
 
+/// <summary>
+/// Basic Game Mode class, handles Waves and Spawning enemies
+/// </summary>
 UCLASS(minimalapi)
 class AFGGameMode : public AGameModeBase
 {
@@ -62,9 +65,11 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Settings|EnemyWaves")
 	UDataTable* WaveSettings = nullptr;
 
+	// Type of Enemy Spawner to find in the map
 	UPROPERTY(EditDefaultsOnly, Category = "Settings|EnemyWaves")
 	TSubclassOf<AAIAgentSpawner> EnemySpawnerClass = nullptr;
 
+	// Current references to Spawners
 	UPROPERTY() TArray<AActor*> EnemySpawners = {};
 
 	UPROPERTY() TArray<AFGAICharacter*> SpawnedEnemies = {};
