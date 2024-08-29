@@ -8,6 +8,7 @@
 
 class AEquippableItem;
 class UUserWidget;
+class UWaveStartedWidget;
 
 UCLASS()
 class FIGHTINGGAME_API AFGPlayerController : public APlayerController
@@ -19,6 +20,8 @@ public:
 	AFGPlayerController() = default;
 
 protected:
+	virtual void BeginPlay() override;
+
 	virtual void OnPossess(APawn* InPawn) override;
 
 	virtual void OnUnPossess() override;
@@ -96,6 +99,13 @@ protected:
 	void CharacterMoveRight(const float Value);
 #pragma endregion Movement
 
+#pragma region GamePhases
+protected:
+	UFUNCTION() virtual void OnWaveStarted(const int32 WaveNumber);
+
+	UFUNCTION() virtual void OnGameEnded();
+#pragma endregion GamePhases
+
 #pragma region UI
 protected:
 	void SetupHUDWidget();
@@ -107,6 +117,16 @@ protected:
 	TSubclassOf<UUserWidget> HUDWidgetClass = nullptr;
 
 	UPROPERTY() UUserWidget* HUDWidgetInstance = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI|Wave")
+	TSubclassOf<UWaveStartedWidget> WaveStartWidgetClass = nullptr;
+
+	UPROPERTY() UWaveStartedWidget* WaveStartWidgetInstance = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI|GameOver")
+	TSubclassOf<UUserWidget> GameOverWidgetClass = nullptr;
+
+	UPROPERTY() UUserWidget* GameOverWidgetInstance = nullptr;
 #pragma endregion UI
 
 #pragma region Death

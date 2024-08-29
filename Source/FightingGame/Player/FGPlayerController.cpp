@@ -8,7 +8,20 @@
 #include "FightingGame/Items/EquippableItem.h"
 #include "FightingGame/Components/HealthComponent.h"
 #include "FightingGame/Player/FGPlayerState.h"
+#include "FightingGame/Core/FGGameMode.h"
+#include "FightingGame/UI/WaveStartedWidget.h"
 
+
+void AFGPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (const auto GM = GetWorld()->GetAuthGameMode<AFGGameMode>())
+	{
+		GM->OnWaveStarted.AddDynamic(this, &ThisClass::OnWaveStarted);
+		GM->OnGameOver.AddDynamic(this, &ThisClass::OnGameEnded);
+	}
+}
 
 void AFGPlayerController::OnPossess(APawn* InPawn)
 {
@@ -143,6 +156,43 @@ void AFGPlayerController::CharacterMoveRight(const float Value)
 	GetCharacter()->AddMovementInput(Direction, Value);
 }
 
+void AFGPlayerController::OnWaveStarted(const int32 WaveNumber)
+{
+	if (!IsValid(WaveStartWidgetClass)) return;
+
+	if (!IsValid(WaveStartWidgetInstance))
+	{
+		WaveStartWidgetInstance = CreateWidget<UWaveStartedWidget>(this, WaveStartWidgetClass);
+	}
+
+	if (IsValid(WaveStartWidgetInstance))
+	{
+		if (!WaveStartWidgetInstance->IsInViewport())
+			WaveStartWidgetInstance->AddToViewport();
+
+		WaveStartWidgetInstance->SetWaveNumber(WaveNumber);
+		WaveStartWidgetInstance->ShowWidget();
+	}
+}
+
+void AFGPlayerController::OnGameEnded()
+{
+	if (!IsValid(GameOverWidgetClass)) return;
+
+	if (!IsValid(GameOverWidgetInstance))
+	{
+		GameOverWidgetInstance = CreateWidget(this, GameOverWidgetClass);
+	}
+
+	if (IsValid(GameOverWidgetInstance))
+	{
+		if (!GameOverWidgetInstance->IsInViewport())
+			GameOverWidgetInstance->AddToViewport();
+
+		bShowMouseCursor = true;
+	}
+}
+
 void AFGPlayerController::SetupHUDWidget()
 {
 	if (!IsValid(HUDWidgetClass)) return;
@@ -175,7 +225,11 @@ void AFGPlayerController::HandlePlayerDeath()
 	}
 
 	if (IsValid(DeathWidgetInstance))
+	{
 		DeathWidgetInstance->AddToViewport();
+
+		bShowMouseCursor = true;
+	}
 
 	if (const auto OwnedCharacter = GetPawn<AFGCharacter>())
 	{
