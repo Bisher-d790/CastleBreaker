@@ -4,7 +4,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Perception/PawnSensingComponent.h"
-#include "NavigationSystem/Public/NavigationInvokerComponent.h"
+#include "NavigationInvokerComponent.h"
 
 
 ACBAICharacter::ACBAICharacter()
