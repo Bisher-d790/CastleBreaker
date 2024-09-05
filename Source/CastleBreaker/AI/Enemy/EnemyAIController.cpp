@@ -1,7 +1,7 @@
 #include "EnemyAIController.h"
 
 // Engine
-#include "AIModule/Classes/BehaviorTree/BlackboardComponent.h"
+#include "BehaviorTree/BlackboardComponent.h"
 
 // Project
 #include "CastleBreaker/AI/Enemy/EnemyCharacter.h"

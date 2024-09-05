@@ -1,7 +1,7 @@
 #include "CBAIController.h"
 
 // Engine
-#include "AIModule/Classes/BehaviorTree/BehaviorTree.h"
+#include "BehaviorTree/BehaviorTree.h"
 
 // Project
 #include "CastleBreaker/AI/CBAICharacter.h"

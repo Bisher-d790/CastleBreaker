@@ -6,7 +6,8 @@ public class CastleBreakerEditorTarget : TargetRules
 	public CastleBreakerEditorTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V2;
-		ExtraModuleNames.Add("CastleBreaker");
+		DefaultBuildSettings = BuildSettingsVersion.Latest;
+
+        ExtraModuleNames.Add("CastleBreaker");
 	}
 }

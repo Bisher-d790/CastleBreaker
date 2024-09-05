@@ -7,6 +7,7 @@
 #include "CBAIController.generated.h"
 
 class UDataTable;
+class UBehaviorTree;
 
 /// <summary>
 /// Parent AI Contorller class to any AI Agent type, handles settings the settings, running the BT, and basic functionalities

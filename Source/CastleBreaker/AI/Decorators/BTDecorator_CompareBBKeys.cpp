@@ -50,7 +50,7 @@ FString UBTDecorator_CompareBBKeys::GetStaticDescription() const
 	return Super::GetStaticDescription() +
 		FString::Printf(TEXT("\nFirst Blackboard Key: %s\n%s\nSecond Blackboard Key: %s"),
 			*FirstBlackboardKey.SelectedKeyName.ToString(),
-			*UEnum::GetValueAsString<EBBComparisonType>(ComparisonType),
+			*UEnum::GetValueAsString(ComparisonType),
 			*SecondBlackboardKey.SelectedKeyName.ToString());
 }
 

@@ -102,11 +102,10 @@ bool UBTTask_FindRandomPointInRadius::GetRandomLocationInRange(const FVector& Ce
 	const float Radius = FMath::RandRange(MinRadius, MaxRadius);
 
 	// Get a random point within radius
-	const FVector& RandomPoint = 
-		NavigationSystem->GetRandomPointInNavigableRadius(GetWorld(), CenterLocation, Radius);
+	NavigationSystem->GetRandomReachablePointInRadius(CenterLocation, Radius, OutLocation);
 
 	// Make sure the point is exactly at the Radius
-	const FVector& TargetLocation = CenterLocation + ((RandomPoint - CenterLocation).GetSafeNormal() * Radius);
+	const FVector& TargetLocation = CenterLocation + ((OutLocation.Location - CenterLocation).GetSafeNormal() * Radius);
 
 	return NavigationSystem->ProjectPointToNavigation(TargetLocation, OutLocation);
 }
