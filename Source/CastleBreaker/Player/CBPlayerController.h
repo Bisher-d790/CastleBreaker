@@ -9,6 +9,9 @@
 class AEquippableItem;
 class UUserWidget;
 class UWaveStartedWidget;
+class UInputMappingContext;
+class UInputAction;
+struct FInputActionValue;
 
 /// <summary>
 /// The main Player Contorller, it handles UI, Controls
@@ -32,52 +35,35 @@ protected:
 	virtual void SetupInputComponent() override;
 #pragma endregion Overrides
 
-#pragma region Camera
-protected:
-	void TurnAtRate(const float Rate);
-
-	void LookUpAtRate(const float Rate);
-
-	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Camera)
-	float BaseTurnRate = 45.f;
-
-	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Camera)
-	float BaseLookUpRate = 45.f;
-#pragma endregion Camera
-
 #pragma region Input
 protected:
-	UPROPERTY(EditDefaultsOnly, Category = UI)
-	FName PrimaryActionInputName = "PrimaryAction";
+	/** Called for movement input */
+	void MoveInput(const FInputActionValue& Value);
 
-	UPROPERTY(EditDefaultsOnly, Category = UI)
-	FName SecondaryActionInputName = "SecondaryAction";
+	/** Called for looking input */
+	void LookInput(const FInputActionValue& Value);
 
-	UPROPERTY(EditDefaultsOnly, Category = UI)
-	FName JumpInputName = "Jump";
+	/** Input MappingContext */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputMappingContext* InputMappingContext;
 
-	UPROPERTY(EditDefaultsOnly, Category = UI)
-	FName CrouchInputName = "Crouch";
+	UPROPERTY(EditDefaultsOnly, Category = Input)
+	UInputAction* PrimaryActionInputAction = nullptr;
 
-	UPROPERTY(EditDefaultsOnly, Category = UI)
-	FName MoveForwardInputName = "MoveForward";
+	UPROPERTY(EditDefaultsOnly, Category = Input)
+	UInputAction* SecondaryActionInputAction = nullptr;
 
-	UPROPERTY(EditDefaultsOnly, Category = UI)
-	FName MoveRightInputName = "MoveRight";
+	UPROPERTY(EditDefaultsOnly, Category = Input)
+	UInputAction* JumpInputAction = nullptr;
 
-	UPROPERTY(EditDefaultsOnly, Category = UI)
-	FName TurnInputName = "Turn";
+	UPROPERTY(EditDefaultsOnly, Category = Input)
+	UInputAction* CrouchInputAction = nullptr;
 
-	UPROPERTY(EditDefaultsOnly, Category = UI)
-	FName TurnRateInputName = "TurnRate";
+	UPROPERTY(EditDefaultsOnly, Category = Input)
+	UInputAction* MoveAction = nullptr;
 
-	UPROPERTY(EditDefaultsOnly, Category = UI)
-	FName LookUpInputName = "LookUp";
-
-	UPROPERTY(EditDefaultsOnly, Category = UI)
-	FName LookUpRateInputName = "LookUpRate";
+	UPROPERTY(EditDefaultsOnly, Category = Input)
+	UInputAction* LookAction = nullptr;
 #pragma endregion Input
 
 #pragma region Actions
@@ -94,12 +80,6 @@ protected:
 	void CharacterJump();
 
 	void CharacterCrouchToggle();
-
-	/** Called for forwards/backward input */
-	void CharacterMoveForward(const float Value);
-
-	/** Called for side to side input */
-	void CharacterMoveRight(const float Value);
 #pragma endregion Movement
 
 #pragma region GamePhases
