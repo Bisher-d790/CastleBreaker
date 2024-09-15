@@ -30,7 +30,7 @@ protected:
 protected:
 	// The main behavior to run
 	UPROPERTY(EditAnywhere, Category = "AI|BehaviorTree")
-	UBehaviorTree* BehaviorTree = nullptr;
+	TObjectPtr<UBehaviorTree> BehaviorTree = nullptr;
 #pragma endregion AI
 
 #pragma region Settings
@@ -38,7 +38,7 @@ protected:
 	virtual void SetupSettingsFromDT() {};
 
 	UPROPERTY(EditDefaultsOnly, Category = "AI|Settings")
-	UDataTable* SettingsTable = nullptr;
+	TObjectPtr<UDataTable> SettingsTable = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, Category = "AI|Settings")
 	FString SettingsRow = "Default";

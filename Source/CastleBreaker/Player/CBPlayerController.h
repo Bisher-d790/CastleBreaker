@@ -45,25 +45,25 @@ protected:
 
 	/** Input MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputMappingContext* InputMappingContext;
+	TObjectPtr<UInputMappingContext> InputMappingContext;
 
 	UPROPERTY(EditDefaultsOnly, Category = Input)
-	UInputAction* PrimaryActionInputAction = nullptr;
+	TObjectPtr<UInputAction> PrimaryActionInputAction = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, Category = Input)
-	UInputAction* SecondaryActionInputAction = nullptr;
+	TObjectPtr<UInputAction> SecondaryActionInputAction = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, Category = Input)
-	UInputAction* JumpInputAction = nullptr;
+	TObjectPtr<UInputAction> JumpInputAction = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, Category = Input)
-	UInputAction* CrouchInputAction = nullptr;
+	TObjectPtr<UInputAction> CrouchInputAction = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, Category = Input)
-	UInputAction* MoveAction = nullptr;
+	TObjectPtr<UInputAction> MoveAction = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, Category = Input)
-	UInputAction* LookAction = nullptr;
+	TObjectPtr<UInputAction> LookAction = nullptr;
 #pragma endregion Input
 
 #pragma region Actions
@@ -99,17 +99,17 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "UI|HUD")
 	TSubclassOf<UUserWidget> HUDWidgetClass = nullptr;
 
-	UPROPERTY() UUserWidget* HUDWidgetInstance = nullptr;
+	UPROPERTY() TObjectPtr<UUserWidget> HUDWidgetInstance = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, Category = "UI|Wave")
 	TSubclassOf<UWaveStartedWidget> WaveStartWidgetClass = nullptr;
 
-	UPROPERTY() UWaveStartedWidget* WaveStartWidgetInstance = nullptr;
+	UPROPERTY() TObjectPtr<UWaveStartedWidget> WaveStartWidgetInstance = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, Category = "UI|GameOver")
 	TSubclassOf<UUserWidget> GameOverWidgetClass = nullptr;
 
-	UPROPERTY() UUserWidget* GameOverWidgetInstance = nullptr;
+	UPROPERTY() TObjectPtr<UUserWidget> GameOverWidgetInstance = nullptr;
 #pragma endregion UI
 
 #pragma region Death
@@ -119,7 +119,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "UI|Death")
 	TSubclassOf<UUserWidget> DeathWidgetClass = nullptr;
 
-	UPROPERTY() UUserWidget* DeathWidgetInstance = nullptr;
+	UPROPERTY() TObjectPtr<UUserWidget> DeathWidgetInstance = nullptr;
 
 	UPROPERTY() bool bIsDead = false;
 #pragma endregion Death

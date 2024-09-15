@@ -37,11 +37,11 @@ protected:
 protected:
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	USpringArmComponent* CameraBoom = nullptr;
+	TObjectPtr<USpringArmComponent> CameraBoom = nullptr;
 
 	/** Follow camera */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	UCameraComponent* FollowCamera = nullptr;
+	TObjectPtr<UCameraComponent> FollowCamera = nullptr;
 
 public:
 	/** Returns CameraBoom subobject **/
@@ -116,7 +116,7 @@ public:
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Health")
-	UHealthComponent* HealthComponent = nullptr;
+	TObjectPtr<UHealthComponent> HealthComponent = nullptr;
 #pragma endregion Health
 };
 

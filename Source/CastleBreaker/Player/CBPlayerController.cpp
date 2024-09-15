@@ -77,7 +77,7 @@ void ACBPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(SecondaryActionInputAction, ETriggerEvent::Completed, this, &ACBPlayerController::OnSecondaryActionEnd);
 
 		// Jump
-		EnhancedInputComponent->BindAction(JumpInputAction, ETriggerEvent::Triggered, this, &ACBPlayerController::CharacterJump);
+		EnhancedInputComponent->BindAction(JumpInputAction, ETriggerEvent::Started, this, &ACBPlayerController::CharacterJump);
 
 		// Crouch
 		EnhancedInputComponent->BindAction(CrouchInputAction, ETriggerEvent::Started, this, &ACBPlayerController::CharacterCrouchToggle);

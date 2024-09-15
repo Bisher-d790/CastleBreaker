@@ -63,7 +63,7 @@ protected:
 	int32 StartingWave = 1;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Settings|EnemyWaves")
-	UDataTable* WaveSettings = nullptr;
+	TObjectPtr<UDataTable> WaveSettings = nullptr;
 
 	// Type of Enemy Spawner to find in the map
 	UPROPERTY(EditDefaultsOnly, Category = "Settings|EnemyWaves")

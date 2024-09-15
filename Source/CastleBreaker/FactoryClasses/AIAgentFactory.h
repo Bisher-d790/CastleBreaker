@@ -25,7 +25,7 @@ public:
 #pragma region Component
 protected:
 	UPROPERTY(EditAnywhere, Category = "Components")
-	UArrowComponent* ArrowComponent = nullptr;
+	TObjectPtr<UArrowComponent> ArrowComponent = nullptr;
 #pragma endregion Component
 
 #pragma region Spawning

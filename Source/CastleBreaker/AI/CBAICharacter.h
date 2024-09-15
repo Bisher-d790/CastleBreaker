@@ -32,10 +32,10 @@ public:
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
-	UPawnSensingComponent* PawnSensingComponent = nullptr;
+	TObjectPtr<UPawnSensingComponent> PawnSensingComponent = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
-	UNavigationInvokerComponent* NavigationInvokerComponent = nullptr;
+	TObjectPtr<UNavigationInvokerComponent> NavigationInvokerComponent = nullptr;
 #pragma endregion Components
 
 #pragma region Sensing

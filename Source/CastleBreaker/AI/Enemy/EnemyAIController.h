@@ -61,7 +61,7 @@ public:
 protected:
 	void SetTargetEnemy(APawn* Enemy);
 
-	UPROPERTY() APawn* TargetEnemy = nullptr;
+	UPROPERTY() TObjectPtr<APawn> TargetEnemy = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, Category = "AI|Enemy")
 	FName TargetEnemyBlackboard = "TargetEnemy";
@@ -94,7 +94,7 @@ public:
 protected:
 	void FinishAttack();
 
-	UPROPERTY() AWeaponItem* AttackingWeapon = nullptr;
+	UPROPERTY() TObjectPtr<AWeaponItem> AttackingWeapon = nullptr;
 
 	// Blackboard Key to be set when attacking, keeps track of the number of enemies currently attacking
 	UPROPERTY(EditDefaultsOnly, Category = "AI|Combat")
