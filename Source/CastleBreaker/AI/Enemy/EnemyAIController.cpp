@@ -86,6 +86,7 @@ void AEnemyAIController::EnemyUnDetected()
 void AEnemyAIController::SetTargetEnemy(APawn* Enemy)
 {
 	TargetEnemy = Enemy;
+
 	SetFocus(TargetEnemy, EAIFocusPriority::Gameplay);
 
 	// Set the new target in the Blackboard
@@ -93,7 +94,6 @@ void AEnemyAIController::SetTargetEnemy(APawn* Enemy)
 	{
 		Blackboard->SetValueAsObject(TargetEnemyBlackboard, Enemy);
 	}
-
 }
 
 bool AEnemyAIController::IsLowHealth() const

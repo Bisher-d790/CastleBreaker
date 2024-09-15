@@ -39,10 +39,10 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere, Category = "Components")
-	UMeshComponent* Mesh = nullptr;
+	TObjectPtr<UMeshComponent> Mesh = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = "Components")
-	UBoxComponent* Collision = nullptr;
+	TObjectPtr<UBoxComponent> Collision = nullptr;
 #pragma endregion Components
 
 #pragma region Equipping
