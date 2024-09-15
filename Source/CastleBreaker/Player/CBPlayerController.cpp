@@ -2,6 +2,10 @@
 
 // Engine
 #include "Blueprint/UserWidget.h"
+#include "Engine/LocalPlayer.h"
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
+#include "InputActionValue.h"
 
 // Project
 #include "CastleBreaker/Character/CBCharacter.h"
@@ -54,37 +58,73 @@ void ACBPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	if (!IsValid(InputComponent)) return;
+	if (!IsValid(GetLocalPlayer()) || !InputMappingContext) return;
 
-	// Set up gameplay key bindings
-	InputComponent->BindAction(PrimaryActionInputName, IE_Pressed, this, &ACBPlayerController::OnPrimaryActionStart);
-	InputComponent->BindAction(PrimaryActionInputName, IE_Released, this, &ACBPlayerController::OnPrimaryActionEnd);
-	InputComponent->BindAction(SecondaryActionInputName, IE_Pressed, this, &ACBPlayerController::OnSecondaryActionStart);
-	InputComponent->BindAction(SecondaryActionInputName, IE_Released, this, &ACBPlayerController::OnSecondaryActionEnd);
+	// Add Input Mapping Context
+	if (auto* InputSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+	{
+		InputSubsystem->AddMappingContext(InputMappingContext, 0);
+	}
 
-	InputComponent->BindAction(JumpInputName, IE_Pressed, this, &ACBPlayerController::CharacterJump);
+	// Set up action bindings
+	if (auto EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent))
+	{
+		// Set up gameplay key bindings
+		// Equipped Item
+		EnhancedInputComponent->BindAction(PrimaryActionInputAction, ETriggerEvent::Started, this, &ACBPlayerController::OnPrimaryActionStart);
+		EnhancedInputComponent->BindAction(PrimaryActionInputAction, ETriggerEvent::Completed, this, &ACBPlayerController::OnPrimaryActionEnd);
+		EnhancedInputComponent->BindAction(SecondaryActionInputAction, ETriggerEvent::Started, this, &ACBPlayerController::OnSecondaryActionStart);
+		EnhancedInputComponent->BindAction(SecondaryActionInputAction, ETriggerEvent::Completed, this, &ACBPlayerController::OnSecondaryActionEnd);
 
-	InputComponent->BindAction(CrouchInputName, IE_Pressed, this, &ACBPlayerController::CharacterCrouchToggle);
+		// Jump
+		EnhancedInputComponent->BindAction(JumpInputAction, ETriggerEvent::Triggered, this, &ACBPlayerController::CharacterJump);
 
-	InputComponent->BindAxis(MoveForwardInputName, this, &ACBPlayerController::CharacterMoveForward);
-	InputComponent->BindAxis(MoveRightInputName, this, &ACBPlayerController::CharacterMoveRight);
+		// Crouch
+		EnhancedInputComponent->BindAction(CrouchInputAction, ETriggerEvent::Started, this, &ACBPlayerController::CharacterCrouchToggle);
 
-	InputComponent->BindAxis(TurnInputName, this, &ACBPlayerController::AddYawInput);
-	InputComponent->BindAxis(TurnRateInputName, this, &ACBPlayerController::TurnAtRate);
-	InputComponent->BindAxis(LookUpInputName, this, &ACBPlayerController::AddPitchInput);
-	InputComponent->BindAxis(LookUpRateInputName, this, &ACBPlayerController::LookUpAtRate);
+		// Moving
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ACBPlayerController::MoveInput);
+
+		// Looking
+		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ACBPlayerController::LookInput);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
+	}
 }
 
-void ACBPlayerController::TurnAtRate(const float Rate)
+void ACBPlayerController::MoveInput(const FInputActionValue& Value)
 {
-	// calculate delta for this frame from the rate information
-	AddYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
+	if (const auto OwnedCharacter = GetPawn<ACBCharacter>())
+	{
+		// input is a Vector2D
+		const FVector2D MovementVector = Value.Get<FVector2D>();
+
+		// find out which way is forward
+		const FRotator Rotation = GetControlRotation();
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+		// get forward vector
+		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+
+		// get right vector 
+		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+
+		// add movement 
+		OwnedCharacter->AddMovementInput(ForwardDirection, MovementVector.Y);
+		OwnedCharacter->AddMovementInput(RightDirection, MovementVector.X);
+	}
 }
 
-void ACBPlayerController::LookUpAtRate(const float Rate)
+void ACBPlayerController::LookInput(const FInputActionValue& Value)
 {
-	// calculate delta for this frame from the rate information
-	AddPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+	// input is a Vector2D
+	FVector2D LookAxisVector = Value.Get<FVector2D>();
+
+	// add yaw and pitch input to controller
+	AddYawInput(LookAxisVector.X);
+	AddPitchInput(LookAxisVector.Y);
 }
 
 void ACBPlayerController::OnPrimaryActionStart()
@@ -126,34 +166,6 @@ void ACBPlayerController::CharacterCrouchToggle()
 		else
 			OwnedCharacter->Crouch();
 	}
-}
-
-void ACBPlayerController::CharacterMoveForward(const float Value)
-{
-	if (!IsValid(GetCharacter()) || Value == 0.0f) return;
-
-	// find out which way is forward
-	const FRotator Rotation = GetControlRotation();
-	const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-	// get forward vector
-	const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	// add movement in that direction
-	GetCharacter()->AddMovementInput(Direction, Value);
-}
-
-void ACBPlayerController::CharacterMoveRight(const float Value)
-{
-	if (!IsValid(GetCharacter()) || Value == 0.0f) return;
-
-	// find out which way is right
-	const FRotator Rotation = GetControlRotation();
-	const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-	// get right vector 
-	const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-	// add movement in that direction
-	GetCharacter()->AddMovementInput(Direction, Value);
 }
 
 void ACBPlayerController::OnWaveStarted(const int32 WaveNumber)
