@@ -28,7 +28,10 @@ void AWeaponItem::StartAttack()
 			MovementComp->DisableMovement();
 
 		if (const auto OwnerMesh = OwnerCharacter->GetMesh())
-			OwnerMesh->PlayAnimation(AttackAnimation, false);
+		{
+			if (const auto animation = AttackAnimation.LoadSynchronous())
+				OwnerMesh->PlayAnimation(animation, false);
+		}
 	}
 
 	// Finish with timer
@@ -43,7 +46,7 @@ void AWeaponItem::FinishAttack()
 	if (const auto OwnerCharacter = GetOwner<ACharacter>())
 	{
 		if (const auto MovementComp = OwnerCharacter->GetCharacterMovement())
-			MovementComp->SetMovementMode(EMovementMode::MOVE_Walking);
+			MovementComp->SetMovementMode(MOVE_Walking);
 
 		if (const auto OwnerMesh = OwnerCharacter->GetMesh())
 			OwnerMesh->SetAnimationMode(EAnimationMode::AnimationBlueprint);
@@ -62,7 +65,7 @@ bool AWeaponItem::CanAttack() const
 		}
 	}
 
-	// Don't attack if is already attacking
+	// Don't attack if it is already attacking
 	return !bIsAttacking;
 }
 
@@ -73,8 +76,8 @@ bool AWeaponItem::CanDamageActor(const AActor* DamagedActor) const
 	// If Owner is of Enemy type
 	if (const auto OwnerController = GetOwner()->GetInstigatorController<AEnemyAIController>())
 	{
-		// Check if can only damage players, and if the victim is a player
-		if(OwnerController->CanOnlyDamagePlayers())
+		// Check if it can only damage players, and if the victim is a player
+		if (OwnerController->CanOnlyDamagePlayers())
 			return IsValid(DamagedActor->GetInstigatorController<APlayerController>());
 	}
 

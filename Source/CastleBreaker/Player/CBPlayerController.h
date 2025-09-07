@@ -14,7 +14,7 @@ class UInputAction;
 struct FInputActionValue;
 
 /// <summary>
-/// The main Player Contorller, it handles UI, Controls
+/// The main Player Controller, it handles UI, Controls
 /// </summary>
 UCLASS()
 class CASTLEBREAKER_API ACBPlayerController : public APlayerController
@@ -22,6 +22,7 @@ class CASTLEBREAKER_API ACBPlayerController : public APlayerController
 	GENERATED_BODY()
 
 #pragma region Overrides
+
 public:
 	ACBPlayerController() = default;
 
@@ -36,6 +37,7 @@ protected:
 #pragma endregion Overrides
 
 #pragma region Input
+
 protected:
 	/** Called for movement input */
 	void MoveInput(const FInputActionValue& Value);
@@ -67,6 +69,7 @@ protected:
 #pragma endregion Input
 
 #pragma region Actions
+
 protected:
 	void OnPrimaryActionStart();
 	void OnPrimaryActionEnd();
@@ -75,6 +78,7 @@ protected:
 #pragma endregion Actions
 
 #pragma region Movement
+
 protected:
 	/** Called for jump input */
 	void CharacterJump();
@@ -83,13 +87,17 @@ protected:
 #pragma endregion Movement
 
 #pragma region GamePhases
-protected:
-	UFUNCTION() virtual void OnWaveStarted(const int32 WaveNumber);
 
-	UFUNCTION() virtual void OnGameEnded();
+protected:
+	UFUNCTION()
+	virtual void OnWaveStarted(const int32 WaveNumber);
+
+	UFUNCTION()
+	virtual void OnGameEnded();
 #pragma endregion GamePhases
 
 #pragma region UI
+
 protected:
 	void SetupHUDWidget();
 
@@ -99,37 +107,46 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "UI|HUD")
 	TSubclassOf<UUserWidget> HUDWidgetClass = nullptr;
 
-	UPROPERTY() TObjectPtr<UUserWidget> HUDWidgetInstance = nullptr;
+	UPROPERTY()
+	TObjectPtr<UUserWidget> HUDWidgetInstance = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, Category = "UI|Wave")
 	TSubclassOf<UWaveStartedWidget> WaveStartWidgetClass = nullptr;
 
-	UPROPERTY() TObjectPtr<UWaveStartedWidget> WaveStartWidgetInstance = nullptr;
+	UPROPERTY()
+	TObjectPtr<UWaveStartedWidget> WaveStartWidgetInstance = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, Category = "UI|GameOver")
 	TSubclassOf<UUserWidget> GameOverWidgetClass = nullptr;
 
-	UPROPERTY() TObjectPtr<UUserWidget> GameOverWidgetInstance = nullptr;
+	UPROPERTY()
+	TObjectPtr<UUserWidget> GameOverWidgetInstance = nullptr;
 #pragma endregion UI
 
 #pragma region Death
+
 protected:
-	UFUNCTION() void HandlePlayerDeath();
+	UFUNCTION()
+	void HandlePlayerDeath();
 
 	UPROPERTY(EditDefaultsOnly, Category = "UI|Death")
 	TSubclassOf<UUserWidget> DeathWidgetClass = nullptr;
 
-	UPROPERTY() TObjectPtr<UUserWidget> DeathWidgetInstance = nullptr;
+	UPROPERTY()
+	TObjectPtr<UUserWidget> DeathWidgetInstance = nullptr;
 
-	UPROPERTY() bool bIsDead = false;
+	UPROPERTY()
+	bool bIsDead = false;
 #pragma endregion Death
 
 #pragma region Kill
+
 public:
 	UFUNCTION(BlueprintCallable, Category = "Kill")
 	void EnemyKilled(const AActor* KilledEnemy);
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEnemyKilled, const AActor*, KilledEnemy);
+
 	FOnEnemyKilled OnEnemyKilled;
 #pragma endregion Kill
 };

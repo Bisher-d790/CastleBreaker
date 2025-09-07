@@ -22,6 +22,7 @@ class ACBGameMode : public AGameModeBase
 	GENERATED_BODY()
 
 #pragma region Overrides
+
 public:
 	ACBGameMode() = default;
 
@@ -32,14 +33,17 @@ protected:
 #pragma endregion Overrides
 
 #pragma region GamePhases
+
 public:
 	virtual void GameOver();
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnGameOver);
+
 	FOnGameOver OnGameOver;
 #pragma endregion GamePhases
 
 #pragma region Enemy Waves
+
 public:
 	UFUNCTION(BlueprintCallable, Category = "Settings|EnemyWaves")
 	void StartWave(const int32 Wave);
@@ -51,13 +55,16 @@ public:
 	FORCEINLINE int32 GetCurrentWave() const { return CurrentWave; }
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWaveChanged, const int32, WaveNumber);
+
 	FOnWaveChanged OnWaveStarted;
 	FOnWaveChanged OnWaveEnded;
 
 protected:
-	UFUNCTION() void SpawnEnemy();
+	UFUNCTION()
+	void SpawnEnemy();
 
-	UFUNCTION() virtual void OnEnemyDeath();
+	UFUNCTION()
+	virtual void OnEnemyDeath();
 
 	UPROPERTY(EditDefaultsOnly, Category = "Settings|EnemyWaves")
 	int32 StartingWave = 1;
@@ -70,18 +77,19 @@ protected:
 	TSubclassOf<AAIAgentFactory> EnemySpawnerClass = nullptr;
 
 	// Current references to Spawners
-	UPROPERTY() TArray<AActor*> EnemySpawners = {};
+	UPROPERTY()
+	TArray<AActor*> EnemySpawners = {};
 
-	UPROPERTY() TArray<ACBAICharacter*> SpawnedEnemies = {};
+	UPROPERTY()
+	TArray<TSoftObjectPtr<ACBAICharacter>> SpawnedEnemies = {};
 
-	UPROPERTY() int32 CurrentWave = 1;
+	UPROPERTY()
+	int32 CurrentWave = 1;
 
-	UPROPERTY() FEnemyWave CurrentWaveSetting = FEnemyWave();
+	UPROPERTY()
+	FEnemyWave CurrentWaveSetting = FEnemyWave();
 
 private:
 	FTimerHandle SpawnEnemiesTimer;
 #pragma endregion Enemy Waves
 };
-
-
-

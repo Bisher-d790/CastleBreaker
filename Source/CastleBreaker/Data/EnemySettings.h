@@ -43,7 +43,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	float AttackDistance = 100.f;
 
-	// Max number of Enemies attacking the player simultanuously
+	// Max number of Enemies attacking the player simultaneously
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	int MaxConcurrentAttackers = 1;
 };

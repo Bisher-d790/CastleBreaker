@@ -15,6 +15,7 @@ class CASTLEBREAKER_API ASwordWeapon : public AWeaponItem
 	GENERATED_BODY()
 
 #pragma region Overrides
+
 public:
 	ASwordWeapon();
 
@@ -23,16 +24,21 @@ protected:
 #pragma endregion Overrides
 
 #pragma region Attack
+
 protected:
 	virtual void StartAttack() override;
 
 	virtual void FinishAttack() override;
 
-	UFUNCTION() void HandleBladeBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	UFUNCTION()
+	void HandleBladeBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	                             UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+	                             const FHitResult& SweepResult);
 
 	UPROPERTY(EditDefaultsOnly, Category = "Attack")
-	UCapsuleComponent* BladeCollision = nullptr;
+	TObjectPtr<UCapsuleComponent> BladeCollision = nullptr;
 
-	UPROPERTY() TArray<AActor*> AttackedActors = {};
+	UPROPERTY()
+	TArray<TObjectPtr<AActor>> AttackedActors = {};
 #pragma endregion Attack
 };

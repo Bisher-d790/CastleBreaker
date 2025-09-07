@@ -35,7 +35,8 @@ ACBCharacter::ACBCharacter()
 
 	// Create a follow camera
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
+	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
+	// Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
@@ -56,14 +57,17 @@ void ACBCharacter::BeginPlay()
 	}
 }
 
-float ACBCharacter::InternalTakeRadialDamage(float Damage, FRadialDamageEvent const& RadialDamageEvent, AController* EventInstigator, AActor* DamageCauser)
+float ACBCharacter::InternalTakeRadialDamage(float Damage, FRadialDamageEvent const& RadialDamageEvent,
+                                             AController* EventInstigator, AActor* DamageCauser)
 {
-	const float ActualDamage = Super::InternalTakeRadialDamage(Damage, RadialDamageEvent, EventInstigator, DamageCauser);
+	const float ActualDamage =
+		Super::InternalTakeRadialDamage(Damage, RadialDamageEvent, EventInstigator, DamageCauser);
 	TakeDamage(ActualDamage);
 	return ActualDamage;
 }
 
-float ACBCharacter::InternalTakePointDamage(float Damage, FPointDamageEvent const& PointDamageEvent, AController* EventInstigator, AActor* DamageCauser)
+float ACBCharacter::InternalTakePointDamage(float Damage, FPointDamageEvent const& PointDamageEvent,
+                                            AController* EventInstigator, AActor* DamageCauser)
 {
 	const float ActualDamage = Super::InternalTakePointDamage(Damage, PointDamageEvent, EventInstigator, DamageCauser);
 	TakeDamage(ActualDamage);
@@ -122,7 +126,8 @@ void ACBCharacter::EquipItem(AEquippableItem* Item)
 	if (IsValid(GetMesh()))
 	{
 		const FVector& HandleLocation = EquippedItem->GetHandleRelativeLocation();
-		EquippedItem->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, EquippedItemSocket);
+		EquippedItem->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale,
+		                                EquippedItemSocket);
 		EquippedItem->SetActorRelativeLocation(HandleLocation);
 	}
 

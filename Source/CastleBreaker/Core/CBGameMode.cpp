@@ -52,7 +52,8 @@ void ACBGameMode::StartWave(const int32 Wave)
 		CurrentWaveSetting = *Settings;
 
 	// Start spawning enemies
-	GetWorldTimerManager().SetTimer(SpawnEnemiesTimer, this, &ACBGameMode::SpawnEnemy, CurrentWaveSetting.TimeBetweenSpawns, true, CurrentWaveSetting.WaveStartDelay);
+	GetWorldTimerManager().SetTimer(SpawnEnemiesTimer, this, &ACBGameMode::SpawnEnemy,
+	                                CurrentWaveSetting.TimeBetweenSpawns, true, CurrentWaveSetting.WaveStartDelay);
 }
 
 void ACBGameMode::EndWave()
@@ -129,9 +130,9 @@ void ACBGameMode::OnEnemyDeath()
 	// Check all enemies health, and check wave end condition
 	for (int32 EnemyIndex = 0; EnemyIndex < SpawnedEnemies.Num(); EnemyIndex++)
 	{
-		if (!IsValid(SpawnedEnemies[EnemyIndex]) || SpawnedEnemies[EnemyIndex]->GetHealth() <= 0)
+		if (!SpawnedEnemies[EnemyIndex].IsValid() || SpawnedEnemies[EnemyIndex]->GetHealth() <= 0)
 		{
-			if (IsValid(SpawnedEnemies[EnemyIndex]))
+			if (SpawnedEnemies[EnemyIndex].IsValid())
 			{
 				if (const auto EnemyHealthComp = SpawnedEnemies[EnemyIndex]->GetHealthComponent())
 				{

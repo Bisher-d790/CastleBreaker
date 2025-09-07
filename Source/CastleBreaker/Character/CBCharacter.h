@@ -23,17 +23,21 @@ class ACBCharacter : public ACharacter, public IDamageableInterface
 	GENERATED_BODY()
 
 #pragma region Overrides
+
 public:
 	ACBCharacter();
 
 protected:
 	virtual void BeginPlay() override;
 
-	virtual float InternalTakeRadialDamage(float Damage, struct FRadialDamageEvent const& RadialDamageEvent, class AController* EventInstigator, AActor* DamageCauser);
-	virtual float InternalTakePointDamage(float Damage, struct FPointDamageEvent const& PointDamageEvent, class AController* EventInstigator, AActor* DamageCauser);
+	virtual float InternalTakeRadialDamage(float Damage, FRadialDamageEvent const& RadialDamageEvent,
+	                                       AController* EventInstigator, AActor* DamageCauser) override;
+	virtual float InternalTakePointDamage(float Damage, FPointDamageEvent const& PointDamageEvent,
+	                                      AController* EventInstigator, AActor* DamageCauser) override;
 #pragma endregion Overrides
 
 #pragma region Camera
+
 protected:
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -48,9 +52,10 @@ public:
 	FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
-#pragma region Camera
+#pragma endregion Camera
 
 #pragma region Actions
+
 public:
 	UFUNCTION(BlueprintCallable, Category = "Actions")
 	virtual void StartPrimaryAction();
@@ -66,9 +71,10 @@ public:
 #pragma endregion Actions
 
 #pragma region EquippedItem
+
 public:
-	template<class T>
-	inline T* GetEquippedItem() const { return Cast<T>(EquippedItem); }
+	template <class T>
+	FORCEINLINE T* GetEquippedItem() const { return Cast<T>(EquippedItem); }
 
 	UFUNCTION(BlueprintPure, Category = "EquippedItem")
 	FORCEINLINE AEquippableItem* GetEquippedItem() const { return EquippedItem; }
@@ -78,7 +84,9 @@ public:
 	void EquipItem(AEquippableItem* Item);
 	void UnEquipItem();
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnEquippedItemChanged, const AEquippableItem*, OldItem, const AEquippableItem*, EquippedItem);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnEquippedItemChanged, const AEquippableItem*, OldItem,
+	                                             const AEquippableItem*, EquippedItem);
+
 	UPROPERTY(BlueprintAssignable, Category = "EquippedItem")
 	FOnEquippedItemChanged OnEquippedItemChanged;
 
@@ -89,7 +97,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "EquippedItem")
 	bool bEquipItemOnBeginPlay = true;
 
-	UPROPERTY() AEquippableItem* EquippedItem = nullptr;
+	UPROPERTY()
+	AEquippableItem* EquippedItem = nullptr;
 
 	// The socket name to connect the item to the Skeleton
 	UPROPERTY(EditDefaultsOnly, Category = "EquippedItem|Socket")
@@ -97,6 +106,7 @@ protected:
 #pragma endregion EquippedItem
 
 #pragma region Health
+
 public:
 	UFUNCTION(BlueprintPure, Category = "Health")
 	virtual FORCEINLINE UHealthComponent* GetHealthComponent() const override { return HealthComponent; }
@@ -119,4 +129,3 @@ protected:
 	TObjectPtr<UHealthComponent> HealthComponent = nullptr;
 #pragma endregion Health
 };
-

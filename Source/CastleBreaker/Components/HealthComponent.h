@@ -15,6 +15,7 @@ class CASTLEBREAKER_API UHealthComponent : public UActorComponent
 	GENERATED_BODY()
 
 #pragma region Overrides
+
 public:
 	UHealthComponent();
 
@@ -23,6 +24,7 @@ protected:
 #pragma endregion Overrides
 
 #pragma region Health
+
 public:
 	UFUNCTION(BlueprintPure, Category = "Health|Getters")
 	FORCEINLINE float GetHealth() const { return Health; }
@@ -42,18 +44,21 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Health")
 	void Damage(const float DamageAmount) { ChangeHealth(-DamageAmount); }
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHealthChanged, const float, CurrentHealth, const float, ChangeAmount);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHealthChanged, const float, CurrentHealth, const float,
+	                                             ChangeAmount);
+
 	UPROPERTY(BlueprintAssignable, Category = "Health|Events")
 	FOnHealthChanged OnHealthChanged;
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeath);
+
 	UPROPERTY(BlueprintAssignable, Category = "Health|Events")
 	FOnDeath OnDeath;
 
 protected:
 	void ChangeHealth(const float ChangeAmount);
 
-	inline void SetHealth(const float NewHealth) { Health = FMath::Clamp(NewHealth, 0.f, MaxHealth); }
+	void SetHealth(const float NewHealth) { Health = FMath::Clamp(NewHealth, 0.f, MaxHealth); }
 
 	UPROPERTY(EditDefaultsOnly, Category = "Health")
 	float InitialHealth = 100.f;

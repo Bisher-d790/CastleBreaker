@@ -9,7 +9,6 @@
 
 // Project
 #include "CastleBreaker/Character/CBCharacter.h"
-#include "CastleBreaker/Items/EquippableItem.h"
 #include "CastleBreaker/Components/HealthComponent.h"
 #include "CastleBreaker/Player/CBPlayerState.h"
 #include "CastleBreaker/Core/CBGameMode.h"
@@ -71,16 +70,22 @@ void ACBPlayerController::SetupInputComponent()
 	{
 		// Set up gameplay key bindings
 		// Equipped Item
-		EnhancedInputComponent->BindAction(PrimaryActionInputAction, ETriggerEvent::Started, this, &ACBPlayerController::OnPrimaryActionStart);
-		EnhancedInputComponent->BindAction(PrimaryActionInputAction, ETriggerEvent::Completed, this, &ACBPlayerController::OnPrimaryActionEnd);
-		EnhancedInputComponent->BindAction(SecondaryActionInputAction, ETriggerEvent::Started, this, &ACBPlayerController::OnSecondaryActionStart);
-		EnhancedInputComponent->BindAction(SecondaryActionInputAction, ETriggerEvent::Completed, this, &ACBPlayerController::OnSecondaryActionEnd);
+		EnhancedInputComponent->BindAction(PrimaryActionInputAction, ETriggerEvent::Started, this,
+		                                   &ACBPlayerController::OnPrimaryActionStart);
+		EnhancedInputComponent->BindAction(PrimaryActionInputAction, ETriggerEvent::Completed, this,
+		                                   &ACBPlayerController::OnPrimaryActionEnd);
+		EnhancedInputComponent->BindAction(SecondaryActionInputAction, ETriggerEvent::Started, this,
+		                                   &ACBPlayerController::OnSecondaryActionStart);
+		EnhancedInputComponent->BindAction(SecondaryActionInputAction, ETriggerEvent::Completed, this,
+		                                   &ACBPlayerController::OnSecondaryActionEnd);
 
 		// Jump
-		EnhancedInputComponent->BindAction(JumpInputAction, ETriggerEvent::Started, this, &ACBPlayerController::CharacterJump);
+		EnhancedInputComponent->BindAction(JumpInputAction, ETriggerEvent::Started, this,
+		                                   &ACBPlayerController::CharacterJump);
 
 		// Crouch
-		EnhancedInputComponent->BindAction(CrouchInputAction, ETriggerEvent::Started, this, &ACBPlayerController::CharacterCrouchToggle);
+		EnhancedInputComponent->BindAction(CrouchInputAction, ETriggerEvent::Started, this,
+		                                   &ACBPlayerController::CharacterCrouchToggle);
 
 		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ACBPlayerController::MoveInput);
@@ -90,7 +95,10 @@ void ACBPlayerController::SetupInputComponent()
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
+		UE_LOG(LogTemp, Error,
+		       TEXT(
+			       "'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."
+		       ), *GetNameSafe(this));
 	}
 }
 

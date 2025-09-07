@@ -17,7 +17,7 @@ AAIAgentFactory::AAIAgentFactory()
 	ArrowComponent->SetupAttachment(RootComponent);
 }
 
-ACBAICharacter* AAIAgentFactory::SpawnAgent(TSubclassOf<ACBAICharacter> AgentClass)
+ACBAICharacter* AAIAgentFactory::SpawnAgent(TSubclassOf<ACBAICharacter> AgentClass) const
 {
 	const auto World = GetWorld();
 	if (!IsValid(World)) return nullptr;

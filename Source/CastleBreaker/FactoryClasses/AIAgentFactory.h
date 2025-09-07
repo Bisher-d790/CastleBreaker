@@ -18,18 +18,21 @@ class CASTLEBREAKER_API AAIAgentFactory : public AActor
 	GENERATED_BODY()
 
 #pragma region Overrides
+
 public:
 	AAIAgentFactory();
 #pragma endregion Overrides
 
 #pragma region Component
+
 protected:
 	UPROPERTY(EditAnywhere, Category = "Components")
 	TObjectPtr<UArrowComponent> ArrowComponent = nullptr;
 #pragma endregion Component
 
 #pragma region Spawning
+
 public:
-	ACBAICharacter* SpawnAgent(TSubclassOf<ACBAICharacter> AgentClass);
+	ACBAICharacter* SpawnAgent(TSubclassOf<ACBAICharacter> AgentClass) const;
 #pragma endregion Spawning
 };

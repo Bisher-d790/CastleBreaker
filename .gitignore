@@ -75,3 +75,5 @@ DerivedDataCache/*
 .vsconfig
 enc_temp_folder/*
 enc_temp_folder
+.idea/
+CastleBreaker.uproject.DotSettings.user

@@ -16,6 +16,7 @@ class CASTLEBREAKER_API AWeaponItem : public AEquippableItem
 	GENERATED_BODY()
 
 #pragma region Attack
+
 public:
 	virtual void StartPrimaryAction() override;
 
@@ -34,7 +35,8 @@ protected:
 
 	virtual bool CanDamageActor(const AActor* DamagedActor) const;
 
-	UPROPERTY() bool bIsAttacking = false;
+	UPROPERTY()
+	bool bIsAttacking = false;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Attack")
 	float AttackDuration = 2.f;
@@ -50,8 +52,9 @@ protected:
 
 	// TODO: Make a comprehensive actions Data Table and set specific animations and properties to each attack
 #pragma region Animations
+
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Attack|Animations")
-	UAnimationAsset* AttackAnimation = nullptr;
+	TSoftObjectPtr<UAnimationAsset> AttackAnimation = nullptr;
 #pragma endregion Animations
 };

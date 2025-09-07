@@ -43,12 +43,14 @@ void ASwordWeapon::FinishAttack()
 	AttackedActors.Empty();
 }
 
-void ASwordWeapon::HandleBladeBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void ASwordWeapon::HandleBladeBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+                                           UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+                                           const FHitResult& SweepResult)
 {
 	if (!IsValid(OtherActor)
 		|| OtherActor == GetOwner()
-		|| AttackedActors.Contains(OtherActor)) return;
-
+		|| AttackedActors.Contains(OtherActor))
+		return;
 
 
 	if (const auto DamageableActor = Cast<IDamageableInterface>(OtherActor))
